@@ -48,6 +48,7 @@ dotenv = { group = "io.github.cdimascio", name = "dotenv-kotlin", version.ref = 
 exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed" }
 exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.ref = "exposed" }
 exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time", version.ref = "exposed" }
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 flyway = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway" }
 flyway-postgres = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "flyway" }
@@ -96,6 +97,7 @@ postgres = [
     "exposed-core",
     "exposed-dao",
     "exposed-jdbc",
+    "exposed-java-time",
     "flyway",
     "flyway-postgres"
 ]

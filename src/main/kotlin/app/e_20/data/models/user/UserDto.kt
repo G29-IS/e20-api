@@ -12,6 +12,10 @@ data class UserDto(
     // TODO: Actual values
 ) {
 
+    enum class UserGender {
+        MALE, FEMALE, NON_BINARY, OTHER
+    }
+
     fun getResponseDto() = UserResponseDto(id, email)
 
     @Serializable

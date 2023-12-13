@@ -1,6 +1,7 @@
 package app.e_20.api.routing
 
 import app.e_20.api.routing.auth.authRoutes
+import app.e_20.api.routing.event.eventRoutes
 import app.e_20.api.routing.monitoring.monitoringRoutes
 import app.e_20.api.routing.user.userRoutes
 import app.e_20.core.logic.typedId.serialization.IdKotlinXSerializationModule
@@ -18,5 +19,6 @@ fun Application.configureRouting() {
         monitoringRoutes()
         authRoutes()
         userRoutes()
+        eventRoutes()
     }
 }
