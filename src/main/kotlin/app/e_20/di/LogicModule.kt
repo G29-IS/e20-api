@@ -6,20 +6,23 @@ import app.e_20.core.logic.TokenGenerator
 import app.e_20.core.logic.typedId.IdGenerator
 import app.e_20.core.logic.typedId.impl.IxIdGenerator
 import app.e_20.core.logic.typedId.impl.IxIntIdGenerator
+import org.koin.core.module.dsl.createdAtStart
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val logicModule = module {
-    single(createdAtStart = true) {
-        ObjectMapper()
+
+    singleOf(::ObjectMapper) {
+        createdAtStart()
     }
 
-    single(createdAtStart = true) {
-        PasswordEncoder()
+    singleOf(::PasswordEncoder) {
+        createdAtStart()
     }
 
-    single(createdAtStart = true) {
-        TokenGenerator()
+    singleOf(::TokenGenerator) {
+        createdAtStart()
     }
 
     single<IdGenerator>(named("uuid")) { IxIdGenerator() }

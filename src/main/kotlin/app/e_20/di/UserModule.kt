@@ -30,27 +30,28 @@ val userModule = module {
         createdAtStart()
     }
 
-    single<UserDao>(createdAtStart = true) {
-        UserDaoImpl(get())
+    singleOf(::UserDaoImpl) {
+        bind<UserDao>()
+        createdAtStart()
     }
-
 
     // User auth session dao
-    single<UserSessionCM>(createdAtStart = true) {
-        UserSessionCMImpl(get(), get())
+    singleOf(::UserSessionCMImpl) {
+        bind<UserSessionCM>()
+        createdAtStart()
     }
-
-    single<UserSessionDao>(createdAtStart = true) {
-        UserSessionDaoCacheImpl(get())
+    singleOf(::UserSessionDaoCacheImpl) {
+        bind<UserSessionDao>()
+        createdAtStart()
     }
-
 
     // User password reset dao
-    single<PasswordResetDBI>(createdAtStart = true) {
-        PasswordResetDBIImpl(get())
+    singleOf(::PasswordResetDBIImpl) {
+        bind<PasswordResetDBI>()
+        createdAtStart()
     }
-
-    single<PasswordResetDao>(createdAtStart = true) {
-        PasswordResetDaoImpl(get(), get(), get())
+    singleOf(::PasswordResetDaoImpl) {
+        bind<PasswordResetDao>()
+        createdAtStart()
     }
 }

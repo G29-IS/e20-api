@@ -1,9 +1,7 @@
 package app.e_20.di
 
-import app.e_20.config.BrevoConfig
 import app.e_20.core.clients.BrevoClient
 import app.e_20.core.clients.oauth.GoogleOAuthClient
-import app.e_20.core.logic.ObjectMapper
 import app.e_20.data.sources.cache.RedisClient
 import app.e_20.data.sources.db.PostgresClient
 import io.ktor.client.*
@@ -15,12 +13,14 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import org.koin.core.module.dsl.createdAtStart
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val clientModule = module {
 
-    factory {
+    factory<HttpClient> {
         HttpClient(Apache) {
             install(Logging)
             install(ContentNegotiation) {
@@ -37,19 +37,19 @@ val clientModule = module {
         }
     }
 
-    single(createdAtStart = true) {
-        PostgresClient()
+    singleOf(::PostgresClient) {
+        createdAtStart()
     }
 
-    single(createdAtStart = true) {
-        RedisClient()
+    singleOf(::RedisClient) {
+        createdAtStart()
     }
 
-    single(createdAtStart = true) {
-        BrevoClient(get())
+    singleOf(::BrevoClient) {
+        createdAtStart()
     }
 
-    single(createdAtStart = true) {
-        GoogleOAuthClient()
+    singleOf(::GoogleOAuthClient) {
+        createdAtStart()
     }
 }
