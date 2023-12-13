@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.update
 
-object UserDBIImpl : UserDBI {
+class UserDBIImpl : UserDBI {
     private fun UserEntity.fromDto(userDto: UserDto) {
         email = userDto.email
         passwordHash = userDto.passwordHash

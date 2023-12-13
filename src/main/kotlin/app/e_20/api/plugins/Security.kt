@@ -4,6 +4,7 @@ import app.e_20.config.ApiConfig
 import app.e_20.core.logic.DatetimeUtils
 import app.e_20.core.logic.typedId.impl.IxId
 import app.e_20.core.logic.typedId.toIxId
+import app.e_20.data.daos.auth.UserSessionDao
 import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
 import app.e_20.data.models.auth.UserAuthSessionDto
 import app.e_20.data.models.user.UserDto
@@ -15,6 +16,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
+import org.koin.ktor.ext.inject
 
 /**
  * Available authentication methods for api routes
@@ -41,6 +43,7 @@ object JwtClaims {
 fun PipelineContext<Unit, ApplicationCall>.userIdFromSession(): IxId<UserDto>? = call.principal<UserAuthSessionDto>()?.userId
 
 fun Application.configureSecurity() {
+    val userSessionDao by inject<UserSessionDao>()
 
     install(Authentication) {
 
@@ -58,7 +61,7 @@ fun Application.configureSecurity() {
                 val userId: IxId<UserDto> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
                 val sessionId: IxId<UserAuthSessionDto> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
 
-                val session = UserSessionDaoCacheImpl.get(userId, sessionId)
+                val session = userSessionDao.get(userId, sessionId)
 
                 // If there is no session or if it has expired
                 if (session == null || (DatetimeUtils.currentMillis() - session.iat) >= (ApiConfig.sessionMaxAgeInSeconds * 1000))

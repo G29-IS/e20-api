@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 /**
  * Generator of [IxId] based on [UUID].
  */
-object IxIdGenerator : IdGenerator {
+class IxIdGenerator : IdGenerator {
 
     override val idClass: KClass<out Id<*>> = IxId::class
 

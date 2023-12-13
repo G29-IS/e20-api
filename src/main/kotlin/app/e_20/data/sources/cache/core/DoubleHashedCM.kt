@@ -2,6 +2,7 @@ package app.e_20.data.sources.cache.core
 
 import app.e_20.core.logic.ObjectMapper
 import app.e_20.data.sources.cache.RedisClient
+import redis.clients.jedis.JedisPool
 
 /**
  * Hashed cache manager that accepts a dynamic values as hash keys
@@ -25,7 +26,9 @@ import app.e_20.data.sources.cache.RedisClient
  * @param keyBase the base for all the hash keys
  */
 abstract class DoubleHashedCM(
-    private val keyBase: String
+    private val keyBase: String,
+    val redisClient: RedisClient,
+    val objectMapper: ObjectMapper
 ) {
     /**
      * Constructs the hash key from the base + dynamic
@@ -36,8 +39,8 @@ abstract class DoubleHashedCM(
      * Get all the fields of a specific key of the hash
      */
     protected inline fun <reified T> getAll(keyValue: String): List<T> {
-        RedisClient.jedisPool.resource.use {
-            return ObjectMapper.decodeList(it.hgetAll(keyName(keyValue)).values)
+        redisClient.jedisPool.resource.use {
+            return objectMapper.decodeList(it.hgetAll(keyName(keyValue)).values)
         }
     }
 
@@ -45,9 +48,9 @@ abstract class DoubleHashedCM(
      * Get a single field from the hash
      */
     protected inline fun <reified T> get(keyValue: String, field: String): T? {
-        RedisClient.jedisPool.resource.use {
+        redisClient.jedisPool.resource.use {
             val json = it.hget(keyName(keyValue), field)
-            return if (json != null) ObjectMapper.decode(json) else null
+            return if (json != null) objectMapper.decode(json) else null
         }
     }
 
@@ -58,8 +61,8 @@ abstract class DoubleHashedCM(
      * @param fieldToDataMap Map of field name to field data
      */
     protected inline fun <reified T> cacheAll(keyValue: String, fieldToDataMap: Map<String, T>) {
-        RedisClient.jedisPool.resource.use {
-            val jsonMap = fieldToDataMap.mapValues { mapItem -> ObjectMapper.encode(mapItem.value) }
+        redisClient.jedisPool.resource.use {
+            val jsonMap = fieldToDataMap.mapValues { mapItem -> objectMapper.encode(mapItem.value) }
             it.hset(keyName(keyValue), jsonMap)
         }
     }
@@ -72,8 +75,8 @@ abstract class DoubleHashedCM(
      * @param data Data to cache
      */
     protected inline fun <reified T> cache(keyValue: String, field: String, data: T) {
-        RedisClient.jedisPool.resource.use {
-            val json = ObjectMapper.encode(data)
+        redisClient.jedisPool.resource.use {
+            val json = objectMapper.encode(data)
             it.hset(keyName(keyValue), field, json)
         }
     }
@@ -84,7 +87,7 @@ abstract class DoubleHashedCM(
      * @param field Field to delete
      */
     protected fun delete(keyValue: String, field: String) {
-        RedisClient.jedisPool.resource.use {
+        redisClient.jedisPool.resource.use {
             it.hdel(keyName(keyValue), field)
         }
     }
@@ -96,7 +99,7 @@ abstract class DoubleHashedCM(
      */
     protected fun deleteMultiple(keyValue: String, vararg fields: String) {
         if (fields.isNotEmpty()) {
-            RedisClient.jedisPool.resource.use {
+            redisClient.jedisPool.resource.use {
                 it.hdel(keyName(keyValue), *fields)
             }
         }
@@ -107,7 +110,7 @@ abstract class DoubleHashedCM(
      * @param keyValue Value of the hash key
      */
     protected fun deleteAll(keyValue: String) {
-        RedisClient.jedisPool.resource.use {
+        redisClient.jedisPool.resource.use {
             it.del(keyName(keyValue))
         }
     }

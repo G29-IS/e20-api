@@ -33,7 +33,7 @@ fun Route.eventsRoute() {
             }
         }
     }) {
-
+        
     }
 
     post<EventsRoute>({

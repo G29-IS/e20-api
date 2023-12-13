@@ -12,12 +12,12 @@ private val log = KotlinLogging.logger {  }
 /**
  * Client to interact with a Postgres database
  */
-object PostgresClient {
-    private const val DB_DRIVER = "org.postgresql.Driver"
+class PostgresClient {
+    private val dbDriver = "org.postgresql.Driver"
 
     private val database = Database.connect(
         url = PostgresConfig.url,
-        driver = DB_DRIVER,
+        driver = dbDriver,
         user = PostgresConfig.user,
         password = PostgresConfig.password
     )
@@ -28,7 +28,7 @@ object PostgresClient {
             context = Dispatchers.IO,
         ) { block() }
 
-    fun init() {
+    init {
         runMigrations()
     }
 
@@ -38,7 +38,7 @@ object PostgresClient {
     private fun runMigrations() {
         val flyway = Flyway
             .configure()
-            .driver(DB_DRIVER)
+            .driver(dbDriver)
             .dataSource(PostgresConfig.url, PostgresConfig.user, PostgresConfig.password)
             .validateMigrationNaming(true)
             .load()

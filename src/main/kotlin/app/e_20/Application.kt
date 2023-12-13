@@ -38,47 +38,14 @@ fun main() {
 
 
     /**
-     * Initialize objects
-     * If objects aren't called they initialize lazily which can lead to a false positive ready state
-     */
-    runBlocking {
-        PostgresClient.init()
-    }
-    RedisClient
-
-    /**
      * Launch api server
      */
-    val apiServer = embeddedServer(Netty, port = ApiConfig.port, host = "0.0.0.0", module = Application::indexApplicationModule)
-
-    // Add shutdown hook to api server
-    apiServer.addShutdownHook {
-        logger.info { "[1/3] Shutting down web server" }
-    }
-
-    /**
-     * Configure application shutdown hook
-     */
-    Runtime.getRuntime().addShutdownHook(
-        Thread {
-            logger.info { "Shutdown started" }
-
-            logger.info { "[1/3] Api server shutdown" }
-
-            BrevoClient.close()
-            logger.info { "[2/3] SendinblueClient client shutdown" }
-
-            RedisClient.close()
-            logger.info { "[3/3] RedisClient client shutdown" }
-
-            logger.info { "Shutdown successful, bye bye ^^" }
-        }
-    )
-
-    apiServer.start(wait = true)
+    embeddedServer(Netty, port = ApiConfig.port, host = "0.0.0.0", module = Application::indexApplicationModule)
+        .start(wait = true)
 }
 
 private fun Application.indexApplicationModule() {
+    configureDI()
     configureHTTP()
     configureMonitoring()
     configureSerialization()

@@ -1,8 +1,6 @@
 package app.e_20.core.clients
 
 import app.e_20.config.BrevoConfig
-import app.e_20.core.clients.BrevoClient.sendPasswordResetEmail
-import app.e_20.core.clients.BrevoClient.sendPasswordResetSuccessEmail
 import app.e_20.data.models.brevo.BrevoCodeOperationRequestBody
 import app.e_20.data.models.brevo.BrevoGenericRequestBody
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -25,21 +23,15 @@ private val log = KotlinLogging.logger { }
  * @see sendPasswordResetEmail
  * @see sendPasswordResetSuccessEmail
  */
-object BrevoClient {
-    private val client = HttpClient(Apache) {
-        install(Logging)
-        install(ContentNegotiation) {
-            json(Json)
-        }
-        install(HttpRequestRetry) {
-            retryOnServerErrors(maxRetries = 3)
-            exponentialDelay()
-        }
-        defaultRequest {
-            url("https://api.sendinblue.com/v3/")
-            contentType(ContentType.Application.Json)
-            accept(ContentType.Application.Json)
-            header("api-key", BrevoConfig.apiKey)
+class BrevoClient(
+    private val httpClient: HttpClient
+) {
+    init {
+        httpClient.config {
+            defaultRequest {
+                url("https://api.sendinblue.com/v3/")
+                header("api-key", BrevoConfig.apiKey)
+            }
         }
     }
 
@@ -51,7 +43,7 @@ object BrevoClient {
      * @param token The token for the password reset
      */
     suspend fun sendPasswordResetEmail(email: String, token: String): Boolean {
-        val response: HttpResponse = client.post("smtp/email") {
+        val response: HttpResponse = httpClient.post("smtp/email") {
             setBody(BrevoCodeOperationRequestBody(
                 to = listOf(
                     BrevoGenericRequestBody.To(
@@ -80,7 +72,7 @@ object BrevoClient {
      * @param email The target receiver email
      */
     suspend fun sendPasswordResetSuccessEmail(email: String): Boolean {
-        val response: HttpResponse = client.post("smtp/email") {
+        val response: HttpResponse = httpClient.post("smtp/email") {
             setBody(BrevoGenericRequestBody(
                 to = listOf(
                     BrevoGenericRequestBody.To(
@@ -101,6 +93,6 @@ object BrevoClient {
     }
 
     fun close() {
-        client.close()
+        httpClient.close()
     }
 }

@@ -9,9 +9,9 @@ import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.cache.cm.UserSessionCM
 import app.e_20.data.sources.cache.cm.impl.UserSessionCMImpl
 
-object UserSessionDaoCacheImpl : UserSessionDao {
-    private val userSessionCM: UserSessionCM = UserSessionCMImpl
-
+class UserSessionDaoCacheImpl(
+    private val userSessionCM: UserSessionCM
+) : UserSessionDao {
     override fun get(userId: IxId<UserDto>, sessionId: IxId<UserAuthSessionDto>) = userSessionCM.get(userId, sessionId)
 
     override fun create(userId: IxId<UserDto>, device: String?, ip: String): IxId<UserAuthSessionDto> {
@@ -32,7 +32,8 @@ object UserSessionDaoCacheImpl : UserSessionDao {
 
     private fun save(userAuthSessionDto: UserAuthSessionDto) = userSessionCM.cache(userAuthSessionDto)
 
-    override fun delete(userId: IxId<UserDto>, sessionId: IxId<UserAuthSessionDto>) = userSessionCM.delete(userId, sessionId)
+    override fun delete(userId: IxId<UserDto>, sessionId: IxId<UserAuthSessionDto>) =
+        userSessionCM.delete(userId, sessionId)
 
     override fun deleteAllSessionsOfUser(userId: IxId<UserDto>) = userSessionCM.deleteAll(userId)
 }

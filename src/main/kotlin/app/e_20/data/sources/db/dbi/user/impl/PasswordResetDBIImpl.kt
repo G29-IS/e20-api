@@ -13,7 +13,9 @@ import app.e_20.data.sources.db.toIxId
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 
-object PasswordResetDBIImpl : PasswordResetDBI {
+class PasswordResetDBIImpl(
+    private val tokenGenerator: TokenGenerator
+) : PasswordResetDBI {
     private fun PasswordResetEntity.fromDto(passwordResetDto: PasswordResetDto) {
         token = passwordResetDto.token
         user = passwordResetDto.userId.toEntityId(UsersTable)
@@ -42,7 +44,7 @@ object PasswordResetDBIImpl : PasswordResetDBI {
 
     override suspend fun get(token: String): PasswordResetDto? = dbQuery {
         PasswordResetEntity
-            .find { PasswordResetTable.token eq TokenGenerator.hashToken(token) }
+            .find { PasswordResetTable.token eq tokenGenerator.hashToken(token) }
             .limit(1)
             .firstOrNull()
             ?.toDto()

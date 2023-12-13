@@ -11,7 +11,7 @@ import com.google.api.client.json.gson.GsonFactory
 /**
  * Client to interact with Google OAuth service
  */
-object GoogleOAuthClient {
+class GoogleOAuthClient {
     private val transport: HttpTransport = ApacheHttpTransport()
     private val jsonFactory: JsonFactory = GsonFactory()
 

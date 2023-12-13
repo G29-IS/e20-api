@@ -1,7 +1,5 @@
 package app.e_20.core.logic
 
-import app.e_20.core.logic.PasswordEncoder.encode
-import app.e_20.core.logic.PasswordEncoder.matches
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 /**
@@ -10,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
  * @see encode
  * @see matches
  */
-object PasswordEncoder {
+class PasswordEncoder {
     private val bcryptPasswordEncoder = BCryptPasswordEncoder()
 
     /**

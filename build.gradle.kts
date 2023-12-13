@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.reflections)
     api(libs.slf4j.api)
 
+    implementation(libs.bundles.koin)
     implementation(libs.bundles.ktor.server)
     implementation(libs.bundles.ktor.client)
     implementation(libs.bundles.spring.security)

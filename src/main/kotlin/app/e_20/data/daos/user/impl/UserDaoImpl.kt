@@ -6,8 +6,9 @@ import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.db.dbi.user.UserDBI
 import app.e_20.data.sources.db.dbi.user.impl.UserDBIImpl
 
-object UserDaoImpl : UserDao {
-    private val userDBI: UserDBI = UserDBIImpl
+class UserDaoImpl(
+    private val userDBI: UserDBI
+) : UserDao {
 
     override suspend fun create(userDto: UserDto) {
         userDBI.create(userDto)

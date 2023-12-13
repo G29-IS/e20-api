@@ -1,7 +1,5 @@
 package app.e_20.core.logic
 
-import app.e_20.core.logic.TokenGenerator.generate
-import app.e_20.core.logic.TokenGenerator.hashToken
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.security.MessageDigest
 import java.security.SecureRandom
@@ -15,7 +13,7 @@ private val log = KotlinLogging.logger {  }
  * @see generate
  * @see hashToken
  */
-object TokenGenerator {
+class TokenGenerator {
     private val secureRandom: SecureRandom = SecureRandom() // thread safe
     private val base64Encoder = Base64.getUrlEncoder()
     private val base64Decoder = Base64.getUrlDecoder()

@@ -1,7 +1,6 @@
 package app.e_20.data.sources.cache
 
 import app.e_20.config.RedisConfig
-import app.e_20.data.sources.cache.RedisClient.close
 import redis.clients.jedis.JedisPool
 
 /**
@@ -9,7 +8,7 @@ import redis.clients.jedis.JedisPool
  *
  * Use [close] when stopping the application
  */
-object RedisClient {
+class RedisClient {
     /**
      * Redis connection pool
      */

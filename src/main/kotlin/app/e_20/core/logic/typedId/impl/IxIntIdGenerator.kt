@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 /**
  * Generator of [IxIntId] based on [Int].
  */
-object IxIntIdGenerator : IdGenerator {
+class IxIntIdGenerator : IdGenerator {
     override val idClass: KClass<out Id<*>> = IxIntId::class
 
     override val wrappedIdClass: KClass<out Any> = Int::class

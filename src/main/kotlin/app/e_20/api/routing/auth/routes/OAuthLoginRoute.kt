@@ -5,7 +5,9 @@ import app.e_20.api.routing.auth.LoginWithGoogle
 import app.e_20.config.ApiConfig
 import app.e_20.core.clients.oauth.GoogleOAuthClient
 import app.e_20.core.exceptions.AuthenticationException
+import app.e_20.data.daos.auth.UserSessionDao
 import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
+import app.e_20.data.daos.user.UserDao
 import app.e_20.data.daos.user.impl.UserDaoImpl
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -16,9 +18,14 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 import java.util.*
 
 fun Route.oauthLoginRoutes() {
+    val userDao by inject<UserDao>()
+    val userSessionDao by inject<UserSessionDao>()
+    val googleOAuthClient by inject<GoogleOAuthClient>()
+
     get<LoginWithGoogle>({
         tags = listOf("auth")
         operationId = "login-with-google"
@@ -45,15 +52,15 @@ fun Route.oauthLoginRoutes() {
             }
         }
     }) {
-        val userInfo = GoogleOAuthClient.getUserInfoFromIdTokenIfValid(it.tokenId)
+        val userInfo = googleOAuthClient.getUserInfoFromIdTokenIfValid(it.tokenId)
             ?: throw AuthenticationException()
 
         // Find the existing user
-        val user = UserDaoImpl.getFromEmail(userInfo.email)
+        val user = userDao.getFromEmail(userInfo.email)
             ?: throw AuthenticationException()
 
         // Send jwt token
-        val sessionId = UserSessionDaoCacheImpl.create(user.id, call.request.userAgent(), call.request.origin.remoteAddress)
+        val sessionId = userSessionDao.create(user.id, call.request.userAgent(), call.request.origin.remoteAddress)
 
         val token = JWT.create()
             .withAudience(ApiConfig.jwtAudience)

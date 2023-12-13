@@ -10,9 +10,11 @@ import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.db.dbi.user.PasswordResetDBI
 import app.e_20.data.sources.db.dbi.user.impl.PasswordResetDBIImpl
 
-object PasswordResetDaoImpl: PasswordResetDao {
-    private val passwordResetDBI: PasswordResetDBI = PasswordResetDBIImpl
-
+class PasswordResetDaoImpl(
+    private val passwordResetDBI: PasswordResetDBI,
+    private val tokenGenerator: TokenGenerator,
+    private val brevoClient: BrevoClient
+) : PasswordResetDao {
     private suspend fun save(passwordResetDto: PasswordResetDto) =
         passwordResetDBI.save(passwordResetDto)
 
@@ -20,7 +22,7 @@ object PasswordResetDaoImpl: PasswordResetDao {
         passwordResetDBI.get(token)
 
     override suspend fun createAndSend(user: UserDto): Boolean {
-        val (token, hashedToken) = TokenGenerator.generate()
+        val (token, hashedToken) = tokenGenerator.generate()
 
         val passwordResetDto = PasswordResetDto(
             token = hashedToken,
@@ -29,7 +31,7 @@ object PasswordResetDaoImpl: PasswordResetDao {
         )
 
         save(passwordResetDto)
-        return BrevoClient.sendPasswordResetEmail(user.email, token)
+        return brevoClient.sendPasswordResetEmail(user.email, token)
     }
 
     override suspend fun isRateLimited(id: IxId<UserDto>): Boolean {

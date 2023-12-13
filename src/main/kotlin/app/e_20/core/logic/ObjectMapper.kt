@@ -1,10 +1,5 @@
 package app.e_20.core.logic
 
-import app.e_20.core.logic.ObjectMapper.decode
-import app.e_20.core.logic.ObjectMapper.decodeFromByteArray
-import app.e_20.core.logic.ObjectMapper.decodeList
-import app.e_20.core.logic.ObjectMapper.encode
-import app.e_20.core.logic.ObjectMapper.encodeToByteArray
 import app.e_20.core.logic.typedId.serialization.IdKotlinXSerializationModule
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -18,7 +13,7 @@ import kotlinx.serialization.json.Json
  * @see decodeFromByteArray
  * @see decodeList
  */
-object ObjectMapper {
+class ObjectMapper {
     val json = Json {
         serializersModule = IdKotlinXSerializationModule
         prettyPrint = true
