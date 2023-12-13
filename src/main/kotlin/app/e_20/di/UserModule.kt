@@ -24,6 +24,8 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val userModule = module {
+    includes(logicModule, clientModule)
+
     // User dao
     singleOf(::UserDBIImpl) {
         bind<UserDBI>()
