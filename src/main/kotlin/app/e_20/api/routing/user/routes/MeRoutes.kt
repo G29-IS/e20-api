@@ -3,7 +3,7 @@ package app.e_20.api.routing.user.routes
 import app.e_20.api.plugins.userIdFromSession
 import app.e_20.api.routing.user.MeRoute
 import app.e_20.core.exceptions.AuthenticationException
-import app.e_20.data.daos.user.UserDao
+import app.e_20.data.daos.user.impl.UserDaoImpl
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -21,9 +21,9 @@ fun Route.meRoutes() {
             }
         }
     }) {
-        val user = UserDao.get(userIdFromSession()!!)
+        val user = UserDaoImpl.get(userIdFromSession()!!)
             ?: throw AuthenticationException()
 
-        call.respond(user.getResponseDto())
+        call.respond(user)
     }
 }

@@ -5,8 +5,8 @@ import app.e_20.api.routing.auth.LoginWithGoogle
 import app.e_20.config.ApiConfig
 import app.e_20.core.clients.oauth.GoogleOAuthClient
 import app.e_20.core.exceptions.AuthenticationException
-import app.e_20.data.daos.auth.UserSessionDao
-import app.e_20.data.daos.user.UserDao
+import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
+import app.e_20.data.daos.user.impl.UserDaoImpl
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
@@ -49,11 +49,11 @@ fun Route.oauthLoginRoutes() {
             ?: throw AuthenticationException()
 
         // Find the existing user
-        val user = UserDao.getFromEmail(userInfo.email)
+        val user = UserDaoImpl.getFromEmail(userInfo.email)
             ?: throw AuthenticationException()
 
         // Send jwt token
-        val sessionId = UserSessionDao.create(user.id, call.request.userAgent(), call.request.origin.remoteAddress)
+        val sessionId = UserSessionDaoCacheImpl.create(user.id, call.request.userAgent(), call.request.origin.remoteAddress)
 
         val token = JWT.create()
             .withAudience(ApiConfig.jwtAudience)

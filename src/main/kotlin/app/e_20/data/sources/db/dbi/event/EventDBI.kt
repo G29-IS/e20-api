@@ -1,4 +1,6 @@
 package app.e_20.data.sources.db.dbi.event
 
-interface EventDBI {
+import app.e_20.data.sources.db.dbi.DBI
+
+interface EventDBI : DBI {
 }

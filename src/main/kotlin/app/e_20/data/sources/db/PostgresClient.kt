@@ -9,8 +9,12 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 private val log = KotlinLogging.logger {  }
 
+/**
+ * Client to interact with a Postgres database
+ */
 object PostgresClient {
     private const val DB_DRIVER = "org.postgresql.Driver"
+
     private val database = Database.connect(
         url = PostgresConfig.url,
         driver = DB_DRIVER,
@@ -28,6 +32,9 @@ object PostgresClient {
         runMigrations()
     }
 
+    /**
+     * Runs all the migrations stored inside `src/resources/db/migration`
+     */
     private fun runMigrations() {
         val flyway = Flyway
             .configure()

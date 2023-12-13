@@ -4,9 +4,9 @@ import app.e_20.api.routing.user.PasswordForgottenRoute
 import app.e_20.api.routing.user.ResetPasswordRoute
 import app.e_20.core.clients.BrevoClient
 import app.e_20.core.logic.PasswordEncoder
-import app.e_20.data.daos.auth.PasswordResetDao
-import app.e_20.data.daos.auth.UserSessionDao
-import app.e_20.data.daos.user.UserDao
+import app.e_20.data.daos.auth.impl.PasswordResetDaoImpl
+import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
+import app.e_20.data.daos.user.impl.UserDaoImpl
 import app.e_20.data.models.auth.PasswordResetRequestBody
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.post
@@ -44,13 +44,13 @@ fun Route.passwordOperationRoutes() {
             }
         }
     }) { request ->
-        val user = UserDao.getFromEmail(request.email)
+        val user = UserDaoImpl.getFromEmail(request.email)
             ?: return@get call.respond(HttpStatusCode.NotFound)
 
-        if (PasswordResetDao.isRateLimited(user.id))
+        if (PasswordResetDaoImpl.isRateLimited(user.id))
             return@get call.respond(HttpStatusCode.TooManyRequests)
 
-        val sentEmail = PasswordResetDao.createAndSend(user)
+        val sentEmail = PasswordResetDaoImpl.createAndSend(user)
 
         if (sentEmail)
             call.respond(HttpStatusCode.OK)
@@ -85,20 +85,20 @@ fun Route.passwordOperationRoutes() {
             }
         }
     }) { request ->
-        val passwordResetDto = PasswordResetDao.get(request.token)
+        val passwordResetDto = PasswordResetDaoImpl.get(request.token)
             ?: return@post call.respond(HttpStatusCode.NotFound)
 
-        val user = UserDao.get(passwordResetDto.userId)
+        val user = UserDaoImpl.get(passwordResetDto.userId)
             ?: return@post call.respond(HttpStatusCode.NotFound)
 
         val newPassword = call.receive<PasswordResetRequestBody>().password
         val newPasswordHashed = PasswordEncoder.encode(newPassword)
 
         // If the user email wasn't verified before, now it can be considered verified
-        UserDao.resetPassword(passwordResetDto.userId, newPasswordHashed)
+        UserDaoImpl.resetPassword(passwordResetDto.userId, newPasswordHashed)
 
         // Invalidate all other user active sessions
-        UserSessionDao.deleteAllSessionsOfUser(passwordResetDto.userId)
+        UserSessionDaoCacheImpl.deleteAllSessionsOfUser(passwordResetDto.userId)
 
         // Send notification email
         BrevoClient.sendPasswordResetSuccessEmail(user.email)

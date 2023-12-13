@@ -2,7 +2,6 @@ package app.e_20.api.routing.event
 
 import app.e_20.api.routing.event.routes.eventRoute
 import app.e_20.api.routing.event.routes.eventsRoute
-import app.e_20.api.routing.event.routes.participationRoute
 import app.e_20.core.logic.typedId.impl.IxId
 import app.e_20.data.models.event.EventDto
 import io.ktor.resources.*
@@ -27,5 +26,5 @@ class EventsRoute(
 fun Route.eventRoutes() {
     eventsRoute()
     eventRoute()
-    participationRoute()
+    // participationRoute()
 }

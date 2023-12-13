@@ -2,31 +2,42 @@ package app.e_20.data.daos.user
 
 import app.e_20.core.logic.typedId.impl.IxId
 import app.e_20.data.models.user.UserDto
-import app.e_20.data.sources.db.dbi.user.impl.UserDBIImpl
 
-// TODO: Docs
-object UserDao {
-
-    suspend fun create(userDto: UserDto) {
-        UserDBIImpl.create(userDto)
-    }
-
-    suspend fun get(id: IxId<UserDto>) : UserDto? {
-        return UserDBIImpl.get(id)
-    }
+/**
+ * [UserDto] data access object (DAO)
+ *
+ * @see create
+ * @see get
+ * @see getFromEmail
+ * @see resetPassword
+ * @see delete
+ */
+interface UserDao {
 
     /**
-     * **This method should be only used in the login route**
+     * Creates a new user
      */
-    suspend fun getFromEmail(email: String) : UserDto? {
-        return UserDBIImpl.get(email)
-    }
+    suspend fun create(userDto: UserDto)
 
-    suspend fun resetPassword(id: IxId<UserDto>, newPasswordHashed: String) {
-        UserDBIImpl.resetPassword(id, newPasswordHashed)
-    }
+    /**
+     * Finds a user by the given [id]
+     */
+    suspend fun get(id: IxId<UserDto>) : UserDto?
 
-    suspend fun delete(id: IxId<UserDto>) {
-        UserDBIImpl.delete(id)
-    }
+    /**
+     * Finds a user by the given [email]
+     *
+     * **This method should only be used in the login process**
+     */
+    suspend fun getFromEmail(email: String) : UserDto?
+
+    /**
+     * Resets the user password with a [newPasswordHashed]
+     */
+    suspend fun resetPassword(id: IxId<UserDto>, newPasswordHashed: String)
+
+    /**
+     * Deletes the user with the given [id]
+     */
+    suspend fun delete(id: IxId<UserDto>)
 }

@@ -4,7 +4,7 @@ import app.e_20.config.ApiConfig
 import app.e_20.core.logic.DatetimeUtils
 import app.e_20.core.logic.typedId.impl.IxId
 import app.e_20.core.logic.typedId.toIxId
-import app.e_20.data.daos.auth.UserSessionDao
+import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
 import app.e_20.data.models.auth.UserAuthSessionDto
 import app.e_20.data.models.user.UserDto
 import com.auth0.jwt.JWT
@@ -58,7 +58,7 @@ fun Application.configureSecurity() {
                 val userId: IxId<UserDto> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
                 val sessionId: IxId<UserAuthSessionDto> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
 
-                val session = UserSessionDao.get(userId, sessionId)
+                val session = UserSessionDaoCacheImpl.get(userId, sessionId)
 
                 // If there is no session or if it has expired
                 if (session == null || (DatetimeUtils.currentMillis() - session.iat) >= (ApiConfig.sessionMaxAgeInSeconds * 1000))
@@ -67,7 +67,7 @@ fun Application.configureSecurity() {
                     session
             }
 
-            challenge { defaultScheme, realm ->
+            challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
             }
         }

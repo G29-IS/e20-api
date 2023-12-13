@@ -5,8 +5,8 @@ import app.e_20.api.routing.auth.LoginRoute
 import app.e_20.config.ApiConfig
 import app.e_20.core.exceptions.AuthenticationException
 import app.e_20.core.logic.PasswordEncoder
-import app.e_20.data.daos.auth.UserSessionDao
-import app.e_20.data.daos.user.UserDao
+import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
+import app.e_20.data.daos.user.impl.UserDaoImpl
 import app.e_20.data.models.auth.LoginCredentials
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -20,9 +20,6 @@ import io.ktor.server.routing.*
 import java.util.*
 
 fun Route.loginRoute() {
-    /**
-     * Logs in a user using email and password
-     */
     post<LoginRoute>({
         tags = listOf("auth")
         operationId = "login"
@@ -48,7 +45,7 @@ fun Route.loginRoute() {
         }
     }) {
         val loginData = call.receive<LoginCredentials>()
-        val user = UserDao.getFromEmail(loginData.email)
+        val user = UserDaoImpl.getFromEmail(loginData.email)
             ?: throw AuthenticationException()
 
         if (user.passwordHash == null)
@@ -57,7 +54,7 @@ fun Route.loginRoute() {
         if (!PasswordEncoder.matches(loginData.password, user.passwordHash))
             throw AuthenticationException()
 
-        val sessionId = UserSessionDao.create(user.id, call.request.userAgent(), call.request.origin.remoteAddress)
+        val sessionId = UserSessionDaoCacheImpl.create(user.id, call.request.userAgent(), call.request.origin.remoteAddress)
 
         val token = JWT.create()
             .withAudience(ApiConfig.jwtAudience)

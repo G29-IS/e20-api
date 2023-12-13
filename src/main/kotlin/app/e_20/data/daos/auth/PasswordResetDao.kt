@@ -1,42 +1,33 @@
 package app.e_20.data.daos.auth
 
-import app.e_20.core.clients.BrevoClient
-import app.e_20.core.logic.DatetimeUtils
-import app.e_20.core.logic.TokenGenerator
 import app.e_20.core.logic.typedId.impl.IxId
 import app.e_20.data.models.user.PasswordResetDto
 import app.e_20.data.models.user.UserDto
-import app.e_20.data.sources.db.dbi.user.impl.PasswordResetDBIImpl
 
-object PasswordResetDao {
-    private suspend fun save(passwordResetDto: PasswordResetDto) =
-        PasswordResetDBIImpl.save(passwordResetDto)
-
-    suspend fun get(token: String): PasswordResetDto? =
-        PasswordResetDBIImpl.get(token)
+/**
+ * [PasswordResetDto] data access object (DAO)
+ *
+ * @see get
+ * @see createAndSend
+ * @see isRateLimited
+ */
+interface PasswordResetDao {
+    /**
+     * Gets the password reset data from the given token
+     */
+    suspend fun get(token: String): PasswordResetDto?
 
     /**
-     * Sends a password reset email to the provided email
-     * and returns true if the email was sent successfully, false otherwise
+     * Create a password reset token and sends an email with reset instructions to the provided [user]
+     *
+     * @return true if the email was sent successfully, false otherwise
      */
-    suspend fun createAndSend(user: UserDto): Boolean {
-        val (token, hashedToken) = TokenGenerator.generate()
-
-        val passwordResetDto = PasswordResetDto(
-            token = hashedToken,
-            userId = user.id,
-            expireAt = DatetimeUtils.currentMillis() + 3600000
-        )
-
-        save(passwordResetDto)
-        return BrevoClient.sendPasswordResetEmail(user.email, token)
-    }
+    suspend fun createAndSend(user: UserDto): Boolean
 
     /**
-     * Up to 7 password resets in an hour
+     * Whether resetting the password is rate limited for the provided user [id]
+     *
+     * @return true if rate limited, false otherwise
      */
-    suspend fun isRateLimited(id: IxId<UserDto>): Boolean {
-        val sent = PasswordResetDBIImpl.count(id)
-        return sent >= 7
-    }
+    suspend fun isRateLimited(id: IxId<UserDto>): Boolean
 }
