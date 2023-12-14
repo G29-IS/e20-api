@@ -5,15 +5,10 @@ import app.e_20.data.models.brevo.BrevoCodeOperationRequestBody
 import app.e_20.data.models.brevo.BrevoGenericRequestBody
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.*
-import io.ktor.client.engine.apache.*
 import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 
 private val log = KotlinLogging.logger { }

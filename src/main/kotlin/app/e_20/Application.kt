@@ -6,15 +6,11 @@ import app.e_20.config.ApiConfig
 import app.e_20.config.ApplicationConfig
 import app.e_20.config.core.ConfigurationManager
 import app.e_20.config.core.ConfigurationReader
-import app.e_20.core.clients.BrevoClient
-import app.e_20.data.sources.cache.RedisClient
-import app.e_20.data.sources.db.PostgresClient
 import ch.qos.logback.classic.Logger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 
 private val logger = KotlinLogging.logger { }

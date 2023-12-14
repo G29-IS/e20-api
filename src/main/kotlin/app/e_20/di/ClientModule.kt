@@ -1,9 +1,5 @@
 package app.e_20.di
 
-import app.e_20.core.clients.BrevoClient
-import app.e_20.core.clients.oauth.GoogleOAuthClient
-import app.e_20.data.sources.cache.RedisClient
-import app.e_20.data.sources.db.PostgresClient
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.plugins.*
@@ -16,10 +12,6 @@ import kotlinx.serialization.json.Json
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
-import org.koin.core.module.dsl.createdAtStart
-import org.koin.core.module.dsl.singleOf
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
 
 @Module(includes = [LogicModule::class])
 @ComponentScan("app.e_20.core.clients")

@@ -4,7 +4,6 @@ import app.e_20.core.logic.typedId.serialization.IdKotlinXSerializationModule
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Single
 
 /**
  * Object serializer and deserializer

@@ -6,9 +6,7 @@ import app.e_20.config.ApiConfig
 import app.e_20.core.clients.oauth.GoogleOAuthClient
 import app.e_20.core.exceptions.AuthenticationException
 import app.e_20.data.daos.auth.UserSessionDao
-import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
 import app.e_20.data.daos.user.UserDao
-import app.e_20.data.daos.user.impl.UserDaoImpl
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.github.smiley4.ktorswaggerui.dsl.resources.get

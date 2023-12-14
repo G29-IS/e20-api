@@ -1,6 +1,5 @@
 package app.e_20.data.sources.db.schemas.event
 
-import app.e_20.data.sources.db.schemas.user.UsersTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

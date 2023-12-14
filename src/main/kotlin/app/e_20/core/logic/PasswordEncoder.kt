@@ -1,6 +1,5 @@
 package app.e_20.core.logic
 
-import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Single
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 

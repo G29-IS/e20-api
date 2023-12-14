@@ -2,7 +2,6 @@ package app.e_20.data.sources.cache.core
 
 import app.e_20.core.logic.ObjectMapper
 import app.e_20.data.sources.cache.RedisClient
-import redis.clients.jedis.JedisPool
 
 /**
  * Hashed cache manager that accepts a dynamic values as hash keys

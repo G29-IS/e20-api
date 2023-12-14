@@ -7,7 +7,6 @@ import app.e_20.data.daos.auth.UserSessionDao
 import app.e_20.data.models.auth.UserAuthSessionDto
 import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.cache.cm.UserSessionCM
-import app.e_20.data.sources.cache.cm.impl.UserSessionCMImpl
 import org.koin.core.annotation.Single
 
 @Single(createdAtStart = true)

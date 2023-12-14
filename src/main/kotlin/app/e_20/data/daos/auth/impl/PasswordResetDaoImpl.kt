@@ -8,7 +8,6 @@ import app.e_20.data.daos.auth.PasswordResetDao
 import app.e_20.data.models.user.PasswordResetDto
 import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.db.dbi.user.PasswordResetDBI
-import app.e_20.data.sources.db.dbi.user.impl.PasswordResetDBIImpl
 import org.koin.core.annotation.Single
 
 @Single(createdAtStart = true)

@@ -4,7 +4,6 @@ import app.e_20.core.logic.typedId.impl.IxId
 import app.e_20.data.daos.user.UserDao
 import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.db.dbi.user.UserDBI
-import app.e_20.data.sources.db.dbi.user.impl.UserDBIImpl
 import org.koin.core.annotation.Single
 
 @Single(createdAtStart = true)

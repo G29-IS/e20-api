@@ -6,7 +6,7 @@ import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.post
 import io.ktor.http.*
 import io.ktor.server.routing.*
-import java.util.Date
+import java.util.*
 
 fun Route.eventsRoute() {
     get<EventsRoute>({

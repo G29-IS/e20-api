@@ -2,8 +2,6 @@ package app.e_20.api.routing.user.routes
 
 import app.e_20.api.routing.user.LogoutRoute
 import app.e_20.data.daos.auth.UserSessionDao
-import app.e_20.data.daos.auth.impl.UserSessionDaoCacheImpl
-import app.e_20.data.daos.user.UserDao
 import app.e_20.data.models.auth.UserAuthSessionDto
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.ktor.http.*
