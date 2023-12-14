@@ -1,8 +1,8 @@
 version: "3.8"
 services:
-  index:
-    image: eu.gcr.io/index-352608/index-api-test:latest
-    container_name: "index-api"
+  e20:
+    image: eu.gcr.io/e-20-408110/e-20-api:latest
+    container_name: "e20-api"
     env_file:
       - .env
     ports:

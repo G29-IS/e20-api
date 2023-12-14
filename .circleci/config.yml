@@ -1,0 +1,34 @@
+version: 2.1
+
+orbs:
+  gradle: circleci/gradle@3.0.0
+  gcp-gcr: circleci/gcp-gcr@0.15.0
+
+jobs:
+  build-and-push-image:
+    executor: gcp-gcr/default
+    steps:
+      - checkout
+      - gcp-gcr/gcr-auth
+      - gcp-gcr/build-image:
+          image: 'e-20-api-<< pipeline.git.branch >>'
+          no_output_timeout: 20m
+          registry-url: eu.gcr.io
+      - gcp-gcr/push-image:
+          image: 'e-20-api-<< pipeline.git.branch >>'
+          registry-url: eu.gcr.io
+
+workflows:
+  test-build-publish:
+    jobs:
+      - gradle/test:
+          name: test
+          executor:
+            name: gradle/default
+            tag: '20.0.1'
+      - build-and-push-image:
+          requires: [test]
+          filters:
+            branches:
+              only:
+                - main
