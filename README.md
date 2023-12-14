@@ -10,7 +10,7 @@ api
 <h4 align="center">REST api per <a href="https://e-20.net" target="_blank">E-20</a>.</h4>
 
 <p align="center">
-  <a href="https://dl.circleci.com/status-badge/redirect/gh/G29-IS/api/tree/main"><img src="https://dl.circleci.com/status-badge/img/gh/G29-IS/api/tree/main.svg?style=svg&circle-token=b98428ac97372542adab9fe5a0a337cb94aa00e5"></a>
+  <a href="https://dl.circleci.com/status-badge/redirect/gh/G29-IS/api/tree/main"><img src="https://dl.circleci.com/status-badge/img/gh/G29-IS/api/tree/main.svg?style=svg&circle-token=4729243b7b647b23465f18f1f2a6a7411909b1d4"></a>
 </p>
 
 ## Esecuzione in locale e development
