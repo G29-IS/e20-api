@@ -14,6 +14,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Single
 
 private val log = KotlinLogging.logger { }
 
@@ -23,6 +24,7 @@ private val log = KotlinLogging.logger { }
  * @see sendPasswordResetEmail
  * @see sendPasswordResetSuccessEmail
  */
+@Single(createdAtStart = true)
 class BrevoClient(
     private val httpClient: HttpClient
 ) {

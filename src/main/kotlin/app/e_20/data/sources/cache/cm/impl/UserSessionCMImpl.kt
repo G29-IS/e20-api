@@ -8,7 +8,9 @@ import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.cache.RedisClient
 import app.e_20.data.sources.cache.cm.UserSessionCM
 import app.e_20.data.sources.cache.core.ExpiringCM
+import org.koin.core.annotation.Single
 
+@Single(createdAtStart = true, binds = [UserSessionCM::class])
 class UserSessionCMImpl(
     redisClient: RedisClient,
     objectMapper: ObjectMapper

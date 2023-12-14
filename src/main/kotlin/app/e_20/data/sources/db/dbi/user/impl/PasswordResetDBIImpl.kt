@@ -12,7 +12,9 @@ import app.e_20.data.sources.db.toEntityId
 import app.e_20.data.sources.db.toIxId
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
+import org.koin.core.annotation.Single
 
+@Single(createdAtStart = true)
 class PasswordResetDBIImpl(
     private val tokenGenerator: TokenGenerator
 ) : PasswordResetDBI {

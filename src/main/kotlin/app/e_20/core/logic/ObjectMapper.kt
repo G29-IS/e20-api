@@ -3,6 +3,8 @@ package app.e_20.core.logic
 import app.e_20.core.logic.typedId.serialization.IdKotlinXSerializationModule
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Single
 
 /**
  * Object serializer and deserializer
@@ -13,6 +15,7 @@ import kotlinx.serialization.json.Json
  * @see decodeFromByteArray
  * @see decodeList
  */
+@Factory
 class ObjectMapper {
     val json = Json {
         serializersModule = IdKotlinXSerializationModule

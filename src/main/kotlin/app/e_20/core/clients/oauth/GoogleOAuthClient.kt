@@ -7,10 +7,12 @@ import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.google.api.client.json.JsonFactory
 import com.google.api.client.json.gson.GsonFactory
+import org.koin.core.annotation.Single
 
 /**
  * Client to interact with Google OAuth service
  */
+@Single(createdAtStart = true)
 class GoogleOAuthClient {
     private val transport: HttpTransport = ApacheHttpTransport()
     private val jsonFactory: JsonFactory = GsonFactory()

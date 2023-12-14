@@ -10,7 +10,9 @@ import app.e_20.data.sources.db.toIxId
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.update
+import org.koin.core.annotation.Single
 
+@Single(createdAtStart = true)
 class UserDBIImpl : UserDBI {
     private fun UserEntity.fromDto(userDto: UserDto) {
         email = userDto.email

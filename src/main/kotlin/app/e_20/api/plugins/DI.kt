@@ -3,8 +3,9 @@ package app.e_20.api.plugins
 import app.e_20.config.ApplicationConfig
 import app.e_20.core.clients.BrevoClient
 import app.e_20.data.sources.cache.RedisClient
-import app.e_20.di.logicModule
-import app.e_20.di.userModule
+import app.e_20.di.ClientModule
+import app.e_20.di.DataModule
+import app.e_20.di.LogicModule
 import io.ktor.server.application.*
 import org.koin.core.logger.Level
 import org.koin.ktor.ext.inject
@@ -13,11 +14,12 @@ import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopPreparing
 import org.koin.ktor.plugin.KoinApplicationStopped
 import org.koin.logger.slf4jLogger
+import org.koin.ksp.generated.*
 
 fun Application.configureDI() {
     install(Koin) {
         slf4jLogger(Level.valueOf(ApplicationConfig.logLevel.levelStr))
-        modules(userModule, logicModule)
+        modules(LogicModule().module, ClientModule().module, DataModule().module)
     }
 
     environment.monitor.subscribe(KoinApplicationStarted) {

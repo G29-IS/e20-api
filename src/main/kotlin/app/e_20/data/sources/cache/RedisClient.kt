@@ -1,6 +1,7 @@
 package app.e_20.data.sources.cache
 
 import app.e_20.config.RedisConfig
+import org.koin.core.annotation.Single
 import redis.clients.jedis.JedisPool
 
 /**
@@ -8,6 +9,7 @@ import redis.clients.jedis.JedisPool
  *
  * Use [close] when stopping the application
  */
+@Single(createdAtStart = true)
 class RedisClient {
     /**
      * Redis connection pool

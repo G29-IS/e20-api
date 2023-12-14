@@ -6,12 +6,14 @@ import kotlinx.coroutines.Dispatchers
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.koin.core.annotation.Single
 
 private val log = KotlinLogging.logger {  }
 
 /**
  * Client to interact with a Postgres database
  */
+@Single(createdAtStart = true)
 class PostgresClient {
     private val dbDriver = "org.postgresql.Driver"
 

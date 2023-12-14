@@ -1,6 +1,7 @@
 package app.e_20.core.logic
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.koin.core.annotation.Single
 import java.security.MessageDigest
 import java.security.SecureRandom
 import java.util.*
@@ -13,6 +14,7 @@ private val log = KotlinLogging.logger {  }
  * @see generate
  * @see hashToken
  */
+@Single
 class TokenGenerator {
     private val secureRandom: SecureRandom = SecureRandom() // thread safe
     private val base64Encoder = Base64.getUrlEncoder()

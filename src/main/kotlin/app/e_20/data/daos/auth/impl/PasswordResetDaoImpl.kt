@@ -9,7 +9,9 @@ import app.e_20.data.models.user.PasswordResetDto
 import app.e_20.data.models.user.UserDto
 import app.e_20.data.sources.db.dbi.user.PasswordResetDBI
 import app.e_20.data.sources.db.dbi.user.impl.PasswordResetDBIImpl
+import org.koin.core.annotation.Single
 
+@Single(createdAtStart = true)
 class PasswordResetDaoImpl(
     private val passwordResetDBI: PasswordResetDBI,
     private val tokenGenerator: TokenGenerator,

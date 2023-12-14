@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.shadow)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.ksp)
 }
 
 group = "app.e_20"
@@ -21,7 +22,9 @@ dependencies {
     implementation(libs.reflections)
     api(libs.slf4j.api)
 
+    ksp(libs.koin.ksp)
     implementation(libs.bundles.koin)
+
     implementation(libs.bundles.ktor.server)
     implementation(libs.bundles.ktor.client)
     implementation(libs.bundles.spring.security)
@@ -36,6 +39,14 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(kotlin("test"))
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK","true")
+}
+
+sourceSets.main {
+    java.srcDirs("build/generated/ksp/main/kotlin")
 }
 
 tasks.test {
