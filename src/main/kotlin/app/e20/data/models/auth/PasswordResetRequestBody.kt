@@ -1,7 +1,7 @@
 package app.e20.data.models.auth
 
 import app.e20.core.logic.RegexPatterns.emailPattern
-import app.e20.data.models.Validatable
+import app.e20.data.validation.Validatable
 import io.konform.validation.Validation
 import io.konform.validation.ValidationResult
 import io.konform.validation.jsonschema.maxLength

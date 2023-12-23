@@ -1,25 +1,20 @@
-package app.e20.data.sources.db.dbi.event
+package app.e20.data.daos.event
 
 import app.e20.core.logic.typedId.impl.IxId
 import app.e20.data.models.event.EventData
 import app.e20.data.models.user.UserData
-import app.e20.data.sources.db.dbi.DBI
 import kotlinx.datetime.LocalDateTime
 
-/**
- * [EventData] database interactor
- *
- * @see create
- * @see get
- * @see getForDates
- * @see update
- * @see delete
- */
-interface EventDBI : DBI {
+interface EventDao {
     /**
      * Creates a new event
+     *
+     * @param userId id of the user that organized the event
+     * @param eventCreateOrUpdateRequestData
+     *
+     * @return [EventData]
      */
-    suspend fun create(eventData: EventData)
+    suspend fun create(userId: IxId<UserData>, eventCreateOrUpdateRequestData: EventData.EventCreateOrUpdateRequestData): EventData
 
     /**
      * Gets a single event by its [id]
@@ -38,13 +33,13 @@ interface EventDBI : DBI {
     /**
      * Updates an event
      *
-     * @param id id of the event to update
-     * @param organizerId id of the event organizer
+     * @param id event id
+     * @param organizerId event organizer id
      * @param eventCreateOrUpdateRequestData update data
      *
      * @return true if any event was updated
      */
-    suspend fun update(id: IxId<EventData>, organizerId: IxId<UserData>, eventCreateOrUpdateRequestData: EventData.EventCreateOrUpdateRequestData) : Boolean
+    suspend fun update(id: IxId<EventData>, organizerId: IxId<UserData>, eventCreateOrUpdateRequestData: EventData.EventCreateOrUpdateRequestData) : EventData?
 
     /**
      * Deletes a single event

@@ -1,12 +1,17 @@
 package app.e20.core.logic
 
-import java.time.ZoneOffset
+import kotlinx.datetime.*
+import kotlinx.datetime.TimeZone
 import java.util.*
 
 object DatetimeUtils {
-    val utcTimeZone = TimeZone.getTimeZone(ZoneOffset.UTC)
+    fun currentLocalDateTime(): LocalDateTime {
+        val currentMoment: Instant = Clock.System.now()
 
-    val oneDayMillis = 24 * 60 * 60 * 1000
+        return currentMoment.toLocalDateTime(TimeZone.UTC)
+    }
+
+    fun currentInstant() = currentLocalDateTime().toInstant(TimeZone.UTC)
 
     fun currentMillis() = System.currentTimeMillis()
 }

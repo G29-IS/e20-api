@@ -1,4 +1,4 @@
-package app.e20.data.models
+package app.e20.data.validation
 
 import io.konform.validation.ValidationResult
 

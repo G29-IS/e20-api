@@ -1,6 +1,7 @@
 package app.e20.api.plugins
 
 import app.e20.config.ApiConfig
+import app.e20.core.exceptions.AuthenticationException
 import app.e20.core.logic.DatetimeUtils
 import app.e20.core.logic.typedId.impl.IxId
 import app.e20.core.logic.typedId.toIxId
@@ -37,9 +38,16 @@ object JwtClaims {
 }
 
 /**
- * Gets the Id of a UserDto from the auth-user-session UserSessionDto
+ * Gets the [IxId] of a [UserData] from the auth-user-session [UserAuthSessionData]
  */
 fun PipelineContext<Unit, ApplicationCall>.userIdFromSession(): IxId<UserData>? = call.principal<UserAuthSessionData>()?.userId
+
+/**
+ * Gets the [IxId] of a [UserData] from the auth-user-session [UserAuthSessionData]
+ *
+ * @throws AuthenticationException
+ */
+fun PipelineContext<Unit, ApplicationCall>.userIdFromSessionOrThrow(): IxId<UserData> = call.principal<UserAuthSessionData>()?.userId ?: throw AuthenticationException()
 
 fun Application.configureSecurity() {
     val userSessionDao by inject<UserSessionDao>()

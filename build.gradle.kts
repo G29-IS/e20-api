@@ -22,6 +22,8 @@ dependencies {
     implementation(libs.reflections)
     api(libs.slf4j.api)
 
+    implementation(libs.kotlinx.datetime)
+
     ksp(libs.koin.ksp)
     implementation(libs.bundles.koin)
 

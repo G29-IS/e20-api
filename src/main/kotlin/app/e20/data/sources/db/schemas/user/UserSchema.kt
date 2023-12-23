@@ -1,9 +1,21 @@
 package app.e20.data.sources.db.schemas.user
 
 import app.e20.data.models.user.UserData
+import app.e20.data.sources.db.schemas.user.UsersTable.birthDate
+import app.e20.data.sources.db.schemas.user.UsersTable.cityOfInterest
 import app.e20.data.sources.db.schemas.user.UsersTable.email
+import app.e20.data.sources.db.schemas.user.UsersTable.gender
 import app.e20.data.sources.db.schemas.user.UsersTable.id
+import app.e20.data.sources.db.schemas.user.UsersTable.name
 import app.e20.data.sources.db.schemas.user.UsersTable.passwordHash
+import app.e20.data.sources.db.schemas.user.UsersTable.phone
+import app.e20.data.sources.db.schemas.user.UsersTable.private
+import app.e20.data.sources.db.schemas.user.UsersTable.profileImageUrl
+import app.e20.data.sources.db.schemas.user.UsersTable.surname
+import app.e20.data.sources.db.schemas.user.UsersTable.username
+import app.e20.data.sources.db.toIxId
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toKotlinLocalDate
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -14,10 +26,18 @@ import java.util.*
 /**
  * users instead of "user" because the latter is a reserved keyword in postgres
  *
- * TODO: Docs
  * @property id
  * @property email
- * @property passwordHash
+ * @property passwordHash null when the account is created using oauth providers (google for this project)
+ * @property name
+ * @property surname
+ * @property username
+ * @property phone
+ * @property birthDate
+ * @property gender
+ * @property cityOfInterest
+ * @property private true if account is private, false for public accounts
+ * @property profileImageUrl
  */
 object UsersTable : UUIDTable() {
     val email = varchar("email", 150).uniqueIndex()
@@ -30,24 +50,64 @@ object UsersTable : UUIDTable() {
     val gender = enumerationByName<UserData.UserGender>("gender", 20)
     val cityOfInterest = varchar("city_of_interest", 150) // TODO
     val private = bool("is_private")
-    val profileImage = varchar("profile_image", 200) // TODO: Check length
+    val profileImageUrl = varchar("profile_image_url", 200) // TODO: Check length
 }
 
 /**
- * TODO: Docs
+ * @property id
+ * @property email
+ * @property passwordHash null when the account is created using oauth providers (google for this project)
+ * @property name
+ * @property surname
+ * @property username
+ * @property phone
+ * @property birthDate
+ * @property gender
+ * @property cityOfInterest
+ * @property private true if account is private, false for public accounts
+ * @property profileImageUrl
  */
 class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<UserEntity>(UsersTable)
 
     var email by UsersTable.email
     var passwordHash by UsersTable.passwordHash
-    val name by UsersTable.name
-    val surname by UsersTable.surname
-    val username by UsersTable.username
-    val phone by UsersTable.phone
-    val birthDate by UsersTable.birthDate
-    val gender by UsersTable.gender
-    val cityOfInterest by UsersTable.cityOfInterest
-    val private by UsersTable.private
-    val profileImage by UsersTable.profileImage
+    var name by UsersTable.name
+    var surname by UsersTable.surname
+    var username by UsersTable.username
+    var phone by UsersTable.phone
+    var birthDate by UsersTable.birthDate
+    var gender by UsersTable.gender
+    var cityOfInterest by UsersTable.cityOfInterest
+    var private by UsersTable.private
+    var profileImageUrl by UsersTable.profileImageUrl
 }
+
+fun UserEntity.fromData(userData: UserData) {
+    email = userData.email
+    passwordHash = userData.passwordHash
+    name = userData.name
+    surname = userData.surname
+    username = userData.username
+    phone = userData.phone
+    birthDate = userData.birthDate.toJavaLocalDate()
+    gender = userData.gender
+    cityOfInterest = userData.cityOfInterest
+    private = userData.private
+    profileImageUrl = userData.profileImageUrl
+}
+
+fun UserEntity.toData() = UserData(
+    idUser = id.toIxId(),
+    email = email,
+    passwordHash = passwordHash,
+    name = name,
+    surname = surname,
+    username = username,
+    phone = phone,
+    birthDate = birthDate.toKotlinLocalDate(),
+    gender = gender,
+    cityOfInterest = cityOfInterest,
+    private = private,
+    profileImageUrl = profileImageUrl
+)

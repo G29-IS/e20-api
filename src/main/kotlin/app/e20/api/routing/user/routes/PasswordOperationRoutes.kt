@@ -54,7 +54,7 @@ fun Route.passwordOperationRoutes() {
         val user = userDao.getFromEmail(request.email)
             ?: return@get call.respond(HttpStatusCode.NotFound)
 
-        if (passwordResetDao.isRateLimited(user.id))
+        if (passwordResetDao.isRateLimited(user.idUser))
             return@get call.respond(HttpStatusCode.TooManyRequests)
 
         val sentEmail = passwordResetDao.createAndSend(user)

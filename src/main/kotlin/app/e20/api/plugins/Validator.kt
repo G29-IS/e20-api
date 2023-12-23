@@ -1,6 +1,6 @@
 package app.e20.api.plugins
 
-import app.e20.data.models.Validatable
+import app.e20.data.validation.Validatable
 import app.e20.data.models.auth.PasswordResetRequestBody
 import io.konform.validation.Valid
 import io.ktor.server.application.*

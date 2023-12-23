@@ -1,6 +1,7 @@
 package app.e20.api.routing.user.routes
 
 import app.e20.api.plugins.userIdFromSession
+import app.e20.api.plugins.userIdFromSessionOrThrow
 import app.e20.api.routing.user.MeRoute
 import app.e20.core.exceptions.AuthenticationException
 import app.e20.data.daos.user.UserDao
@@ -24,7 +25,7 @@ fun Route.meRoutes() {
             }
         }
     }) {
-        val user = userDao.get(userIdFromSession()!!)
+        val user = userDao.get(userIdFromSessionOrThrow())
             ?: throw AuthenticationException()
 
         call.respond(user)
