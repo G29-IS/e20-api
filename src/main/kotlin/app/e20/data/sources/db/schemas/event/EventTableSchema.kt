@@ -98,7 +98,7 @@ class EventEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var isModified by EventTable.isModified
     var timesShared by EventTable.timesShared
 
-    val place by PlaceEntity backReferencedOn EventPlaceTable.event
+    val place by EventPlaceEntity backReferencedOn EventPlaceTable.event
 }
 
 fun EventEntity.fromData(eventData: EventData) {

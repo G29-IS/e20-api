@@ -1,21 +1,15 @@
 package app.e20.data.sources.db.schemas.event
 
-import app.e20.data.models.event.PlaceData
+import app.e20.data.models.event.EventPlaceData
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.address
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.id
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.name
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.url
-import app.e20.data.sources.db.toIxId
-import app.e20.data.sources.db.toIxIntId
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.ReferenceOption
-import java.util.*
 
 /**
  * @property id
@@ -40,8 +34,8 @@ object EventPlaceTable: IntIdTable() {
  * @property address
  * @property url
  */
-class PlaceEntity(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<PlaceEntity>(EventPlaceTable)
+class EventPlaceEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<EventPlaceEntity>(EventPlaceTable)
 
     var name by EventPlaceTable.name
     var address by EventPlaceTable.address
@@ -51,13 +45,13 @@ class PlaceEntity(id: EntityID<Int>) : IntEntity(id) {
     val eventEntity by EventEntity referencedOn EventPlaceTable.event
 }
 
-fun PlaceEntity.fromData(placeData: PlaceData) {
-    name = placeData.name
-    address = placeData.address
-    url = placeData.url
+fun EventPlaceEntity.fromData(eventPlaceData: EventPlaceData) {
+    name = eventPlaceData.name
+    address = eventPlaceData.address
+    url = eventPlaceData.url
 }
 
-fun PlaceEntity.toData() = PlaceData(
+fun EventPlaceEntity.toData() = EventPlaceData(
     name = name,
     address = address,
     url = url
