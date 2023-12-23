@@ -1,8 +1,8 @@
-import app.e_20.config.PostgresConfig
-import app.e_20.config.core.ConfigurationManager
-import app.e_20.config.core.ConfigurationReader
-import app.e_20.data.sources.db.schemas.user.PasswordResetTable
-import app.e_20.data.sources.db.schemas.user.UsersTable
+import app.e20.config.PostgresConfig
+import app.e20.config.core.ConfigurationManager
+import app.e20.config.core.ConfigurationReader
+import app.e20.data.sources.db.schemas.user.PasswordResetTable
+import app.e20.data.sources.db.schemas.user.UsersTable
 import core.createScriptOutputsFolderIfNotExisting
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils

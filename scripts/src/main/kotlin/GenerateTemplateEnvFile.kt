@@ -1,5 +1,5 @@
-import app.e_20.config.core.ConfigurationManager
-import app.e_20.config.core.ConfigurationReader
+import app.e20.config.core.ConfigurationManager
+import app.e20.config.core.ConfigurationReader
 import core.createScriptOutputsFolderIfNotExisting
 import java.io.File
 
