@@ -6,10 +6,15 @@ import app.e20.data.models.brevo.BrevoGenericRequestBody
 import app.e20.di.IClosableComponent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.*
+import io.ktor.client.engine.apache.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 
 private val log = KotlinLogging.logger { }
@@ -21,15 +26,23 @@ private val log = KotlinLogging.logger { }
  * @see sendPasswordResetSuccessEmail
  */
 @Single(createdAtStart = true)
-class BrevoClient(
-    private val httpClient: HttpClient
-) : IClosableComponent {
-    init {
-        httpClient.config {
-            defaultRequest {
-                url("https://api.sendinblue.com/v3/")
-                header("api-key", BrevoConfig.apiKey)
-            }
+class BrevoClient: IClosableComponent {
+
+    // Cannot set default url and header if injected with DI
+    private val httpClient = HttpClient(Apache) {
+        install(Logging)
+        install(ContentNegotiation) {
+            json(Json)
+        }
+        install(HttpRequestRetry) {
+            retryOnServerErrors(maxRetries = 3)
+            exponentialDelay()
+        }
+        defaultRequest {
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            url("https://api.sendinblue.com/v3/")
+            header("api-key", BrevoConfig.apiKey)
         }
     }
 
