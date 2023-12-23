@@ -16,7 +16,7 @@ private const val DB_DRIVER = "org.postgresql.Driver"
  * Result file should be put in /resources/db/migration/V1__create_db.sql
  */
 fun main() {
-    ConfigurationManager("app.e_20.config", ConfigurationReader::read).initialize()
+    ConfigurationManager("app.e20.config", ConfigurationReader::read).initialize()
 
     Database.connect(
         url = PostgresConfig.url,

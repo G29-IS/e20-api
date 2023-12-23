@@ -1,6 +1,6 @@
 package app.e20.data.sources.db.schemas.user
 
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.user.UserData
 import app.e20.data.sources.db.schemas.user.UsersTable.email
 import app.e20.data.sources.db.schemas.user.UsersTable.id
 import app.e20.data.sources.db.schemas.user.UsersTable.passwordHash
@@ -27,7 +27,7 @@ object UsersTable : UUIDTable() {
     val username = varchar("username", 100)
     val phone = varchar("phone", 20)
     val birthDate = date("birth_date")
-    val gender = enumerationByName<UserDto.UserGender>("gender", 20)
+    val gender = enumerationByName<UserData.UserGender>("gender", 20)
     val cityOfInterest = varchar("city_of_interest", 150) // TODO
     val private = bool("is_private")
     val profileImage = varchar("profile_image", 200) // TODO: Check length

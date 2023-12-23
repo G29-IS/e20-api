@@ -1,11 +1,11 @@
 package app.e20.data.daos.auth
 
 import app.e20.core.logic.typedId.impl.IxId
-import app.e20.data.models.auth.UserAuthSessionDto
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.auth.UserAuthSessionData
+import app.e20.data.models.user.UserData
 
 /**
- * [UserAuthSessionDto] data access object (DAO)
+ * [UserAuthSessionData] data access object (DAO)
  *
  * @see get
  * @see create
@@ -14,11 +14,11 @@ import app.e20.data.models.user.UserDto
  */
 interface UserSessionDao {
     /**
-     * Gets the [UserAuthSessionDto] for the given [sessionId] of [userId]
+     * Gets the [UserAuthSessionData] for the given [sessionId] of [userId]
      *
-     * @return [UserAuthSessionDto] or null if not session was found
+     * @return [UserAuthSessionData] or null if not session was found
      */
-    fun get(userId: IxId<UserDto>, sessionId: IxId<UserAuthSessionDto>): UserAuthSessionDto?
+    fun get(userId: IxId<UserData>, sessionId: IxId<UserAuthSessionData>): UserAuthSessionData?
 
     /**
      * Creates a new session for the [userId]
@@ -27,17 +27,17 @@ interface UserSessionDao {
      * @param device device for which the session was requested
      * @param ip ip of the device
      *
-     * @return [IxId] of the [UserAuthSessionDto]
+     * @return [IxId] of the [UserAuthSessionData]
      */
-    fun create(userId: IxId<UserDto>, device: String?, ip: String): IxId<UserAuthSessionDto>
+    fun create(userId: IxId<UserData>, device: String?, ip: String): IxId<UserAuthSessionData>
 
     /**
      * Deletes a user auth session
      */
-    fun delete(userId: IxId<UserDto>, sessionId: IxId<UserAuthSessionDto>)
+    fun delete(userId: IxId<UserData>, sessionId: IxId<UserAuthSessionData>)
 
     /**
      * Deletes all existing auth session of a given [userId]
      */
-    fun deleteAllSessionsOfUser(userId: IxId<UserDto>)
+    fun deleteAllSessionsOfUser(userId: IxId<UserData>)
 }

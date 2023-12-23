@@ -3,6 +3,7 @@ package app.e20.core.clients
 import app.e20.config.BrevoConfig
 import app.e20.data.models.brevo.BrevoCodeOperationRequestBody
 import app.e20.data.models.brevo.BrevoGenericRequestBody
+import app.e20.di.IClosableComponent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.*
 import io.ktor.client.plugins.*
@@ -22,7 +23,7 @@ private val log = KotlinLogging.logger { }
 @Single(createdAtStart = true)
 class BrevoClient(
     private val httpClient: HttpClient
-) {
+) : IClosableComponent {
     init {
         httpClient.config {
             defaultRequest {
@@ -89,7 +90,7 @@ class BrevoClient(
         return response.status.isSuccess()
     }
 
-    fun close() {
+    override suspend fun close() {
         httpClient.close()
     }
 }

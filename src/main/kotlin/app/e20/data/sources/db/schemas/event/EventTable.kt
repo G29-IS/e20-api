@@ -1,6 +1,6 @@
 package app.e20.data.sources.db.schemas.event
 
-import app.e20.data.models.event.EventDto
+import app.e20.data.models.event.EventData
 import app.e20.data.sources.db.schemas.user.UsersTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -26,11 +26,11 @@ object EventTable : UUIDTable() {
     )
     val openingDateTime = datetime("opening_date_time")
     val doorOpeningDateTime = datetime("door_opening_date_time")
-    val type = enumerationByName<EventDto.EventType>("event_type", 20)
+    val type = enumerationByName<EventData.EventType>("event_type", 20)
     val maxParticipants = long("max_participants").nullable()
-    val visibility = enumerationByName<EventDto.EventVisibility>("event_type", 20)
+    val visibility = enumerationByName<EventData.EventVisibility>("event_type", 20)
     val paymentLink = varchar("event_link", 200)
-    val availability = enumerationByName<EventDto.EventAvailability>("availability", 20)
+    val availability = enumerationByName<EventData.EventAvailability>("availability", 20)
     val isModified = bool("is_modified")
     val timesShared = long("times_shared")
 }

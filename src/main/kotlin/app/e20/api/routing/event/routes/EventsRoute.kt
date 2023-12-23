@@ -1,7 +1,7 @@
 package app.e20.api.routing.event.routes
 
 import app.e20.api.routing.event.EventsRoute
-import app.e20.data.models.event.EventDto
+import app.e20.data.models.event.EventData
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.post
 import io.ktor.http.*
@@ -27,7 +27,7 @@ fun Route.eventsRoute() {
         response {
             HttpStatusCode.OK to {
                 description = "list of events"
-                body<List<EventDto>> {
+                body<List<EventData>> {
                     description = "" // TODO
                 }
             }

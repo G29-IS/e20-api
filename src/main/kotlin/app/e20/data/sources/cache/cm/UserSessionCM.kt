@@ -1,8 +1,8 @@
 package app.e20.data.sources.cache.cm
 
 import app.e20.core.logic.typedId.impl.IxId
-import app.e20.data.models.auth.UserAuthSessionDto
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.auth.UserAuthSessionData
+import app.e20.data.models.user.UserData
 
 /**
  * User auth session storage in cache
@@ -16,21 +16,21 @@ interface UserSessionCM {
     /**
      * Gets a session from the cache by the [sessionId] and [userId]
      */
-    fun get(userId: IxId<UserDto>, sessionId: IxId<UserAuthSessionDto>): UserAuthSessionDto?
+    fun get(userId: IxId<UserData>, sessionId: IxId<UserAuthSessionData>): UserAuthSessionData?
 
     /**
-     * Stores a [userAuthSessionDto] in the cache
+     * Stores a [userAuthSessionData] in the cache
      */
-    fun cache(userAuthSessionDto: UserAuthSessionDto)
+    fun cache(userAuthSessionData: UserAuthSessionData)
 
     /**
      * Deletes a session from the cache by the [userId] and [sessionId]
      */
-    fun delete(userId: IxId<UserDto>, sessionId: IxId<UserAuthSessionDto>)
+    fun delete(userId: IxId<UserData>, sessionId: IxId<UserAuthSessionData>)
 
 
     /**
      * Deletes all sessions of the user with the given [userId] from the cache
      */
-    fun deleteAll(userId: IxId<UserDto>)
+    fun deleteAll(userId: IxId<UserData>)
 }

@@ -1,12 +1,12 @@
 package app.e20.data.sources.db.dbi.user
 
 import app.e20.core.logic.typedId.impl.IxId
-import app.e20.data.models.user.PasswordResetDto
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.user.PasswordResetData
+import app.e20.data.models.user.UserData
 import app.e20.data.sources.db.dbi.DBI
 
 /**
- * [PasswordResetDto] database interactor
+ * [PasswordResetData] database interactor
  *
  * @see count
  * @see save
@@ -17,20 +17,20 @@ interface PasswordResetDBI : DBI {
     /**
      * Counts the amount of password reset entities in the database
      */
-    suspend fun count(id: IxId<UserDto>): Long
+    suspend fun count(id: IxId<UserData>): Long
 
     /**
-     * Saves a [passwordResetDto] in the database
+     * Saves a [passwordResetData] in the database
      */
-    suspend fun save(passwordResetDto: PasswordResetDto)
+    suspend fun save(passwordResetData: PasswordResetData)
 
     /**
-     * Gets a [PasswordResetDto] from the given [token]
+     * Gets a [PasswordResetData] from the given [token]
      */
-    suspend fun get(token: String): PasswordResetDto?
+    suspend fun get(token: String): PasswordResetData?
 
     /**
-     * Deletes all [PasswordResetDto] of a user with the given [id]
+     * Deletes all [PasswordResetData] of a user with the given [id]
      */
-    suspend fun deleteAll(id: IxId<UserDto>)
+    suspend fun deleteAll(id: IxId<UserData>)
 }

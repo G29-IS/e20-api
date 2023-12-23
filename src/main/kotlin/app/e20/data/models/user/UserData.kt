@@ -10,8 +10,8 @@ import kotlinx.serialization.Serializable
  * @param passwordHash null when the account is created using oauth providers (google for this project)
  */
 @Serializable
-data class UserDto(
-    @Contextual val id: IxId<UserDto>,
+data class UserData(
+    @Contextual val id: IxId<UserData>,
     val email: String,
     val passwordHash: String?,
     // TODO: Actual values

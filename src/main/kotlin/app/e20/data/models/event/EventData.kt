@@ -5,20 +5,9 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EventDto(
-    @Contextual val id: IxId<EventDto>
+data class EventData(
+    @Contextual val id: IxId<EventData>
 ) {
-    /*
-    CONCERT
-FESTIVAL
-BAR
-CLUB
-PARTY
-HOUSEPARTY
-PRIVATEPARTY
-WORKSHOP
-CONGRESS
-     */
     enum class EventType {
         CONCERT, FESTIVAL, BAR, CLUB, PARTY, HOUSEPARTY, PRIVATEPARTY, WORKSHOP, CONGRESS
     }

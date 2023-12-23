@@ -1,7 +1,7 @@
 package app.e20.core.clients.oauth
 
 import app.e20.config.OAuthConfig
-import app.e20.data.models.oauth.google.GoogleUserInfoDto
+import app.e20.data.models.oauth.google.GoogleUserInfoData
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
@@ -25,13 +25,13 @@ class GoogleOAuthClient {
      * Verifies a user [token] and gets the user info if valid
      *
      * @param token
-     * @return [GoogleUserInfoDto]
+     * @return [GoogleUserInfoData]
      */
-    fun getUserInfoFromIdTokenIfValid(token: String): GoogleUserInfoDto? {
+    fun getUserInfoFromIdTokenIfValid(token: String): GoogleUserInfoData? {
         val idToken = verifier.verify(token) ?: return null
         val payload = idToken.payload
 
-        return GoogleUserInfoDto(
+        return GoogleUserInfoData(
             email = payload.email,
         )
     }

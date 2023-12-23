@@ -2,8 +2,8 @@ package app.e20.data.sources.db.dbi.user.impl
 
 import app.e20.core.logic.TokenGenerator
 import app.e20.core.logic.typedId.impl.IxId
-import app.e20.data.models.user.PasswordResetDto
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.user.PasswordResetData
+import app.e20.data.models.user.UserData
 import app.e20.data.sources.db.dbi.user.PasswordResetDBI
 import app.e20.data.sources.db.schemas.user.PasswordResetEntity
 import app.e20.data.sources.db.schemas.user.PasswordResetTable
@@ -18,33 +18,33 @@ import org.koin.core.annotation.Single
 class PasswordResetDBIImpl(
     private val tokenGenerator: TokenGenerator
 ) : PasswordResetDBI {
-    private fun PasswordResetEntity.fromDto(passwordResetDto: PasswordResetDto) {
-        token = passwordResetDto.token
-        user = passwordResetDto.userId.toEntityId(UsersTable)
-        createdAt = passwordResetDto.createdAt
-        expiresAt = passwordResetDto.expireAt
+    private fun PasswordResetEntity.fromDto(passwordResetData: PasswordResetData) {
+        token = passwordResetData.token
+        user = passwordResetData.userId.toEntityId(UsersTable)
+        createdAt = passwordResetData.createdAt
+        expiresAt = passwordResetData.expireAt
     }
 
-    private fun PasswordResetEntity.toDto() = PasswordResetDto(
+    private fun PasswordResetEntity.toDto() = PasswordResetData(
         token = token,
         userId = user.toIxId(),
         createdAt = createdAt,
         expireAt = expiresAt
     )
     
-    override suspend fun count(id: IxId<UserDto>): Long = dbQuery {
+    override suspend fun count(id: IxId<UserData>): Long = dbQuery {
         PasswordResetEntity.count(PasswordResetTable.user eq id.toEntityId(UsersTable))
     }
 
-    override suspend fun save(passwordResetDto: PasswordResetDto) {
+    override suspend fun save(passwordResetData: PasswordResetData) {
         dbQuery {
             PasswordResetEntity.new {
-                fromDto(passwordResetDto)
+                fromDto(passwordResetData)
             }
         }
     }
 
-    override suspend fun get(token: String): PasswordResetDto? = dbQuery {
+    override suspend fun get(token: String): PasswordResetData? = dbQuery {
         PasswordResetEntity
             .find { PasswordResetTable.token eq tokenGenerator.hashToken(token) }
             .limit(1)
@@ -52,7 +52,7 @@ class PasswordResetDBIImpl(
             ?.toDto()
     }
 
-    override suspend fun deleteAll(id: IxId<UserDto>) {
+    override suspend fun deleteAll(id: IxId<UserData>) {
         dbQuery {
             PasswordResetTable.deleteWhere { user eq id.toEntityId(UsersTable) }
         }

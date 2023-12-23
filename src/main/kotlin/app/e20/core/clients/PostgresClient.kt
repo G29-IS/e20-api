@@ -1,4 +1,4 @@
-package app.e20.data.sources.db
+package app.e20.core.clients
 
 import app.e20.config.PostgresConfig
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -38,8 +38,7 @@ class PostgresClient {
      * Runs all the migrations stored inside `src/resources/db/migration`
      */
     private fun runMigrations() {
-        val flyway = Flyway
-            .configure()
+        val flyway = Flyway.configure()
             .driver(dbDriver)
             .dataSource(PostgresConfig.url, PostgresConfig.user, PostgresConfig.password)
             .validateMigrationNaming(true)

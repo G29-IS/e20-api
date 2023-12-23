@@ -1,11 +1,11 @@
 package app.e20.data.sources.db.dbi.user
 
 import app.e20.core.logic.typedId.impl.IxId
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.user.UserData
 import app.e20.data.sources.db.dbi.DBI
 
 /**
- * [UserDto] database interactor
+ * [UserData] database interactor
  *
  * @see create
  * @see get
@@ -15,27 +15,27 @@ import app.e20.data.sources.db.dbi.DBI
  */
 interface UserDBI : DBI {
     /**
-     * Creates a new [UserDto] entity in the database
+     * Creates a new [UserData] entity in the database
      */
-    suspend fun create(userDto: UserDto)
+    suspend fun create(userData: UserData)
 
     /**
-     * Gets a [UserDto] entity from the database
+     * Gets a [UserData] entity from the database
      */
-    suspend fun get(id: IxId<UserDto>): UserDto?
+    suspend fun get(id: IxId<UserData>): UserData?
 
     /**
-     * Gets a [UserDto] entity from the database querying by the [email]
+     * Gets a [UserData] entity from the database querying by the [email]
      */
-    suspend fun get(email: String): UserDto?
+    suspend fun get(email: String): UserData?
 
     /**
      * Sets the [newPasswordHashed] for the user with the given [id]
      */
-    suspend fun resetPassword(id: IxId<UserDto>, newPasswordHashed: String)
+    suspend fun resetPassword(id: IxId<UserData>, newPasswordHashed: String)
 
     /**
      * Deletes a user entity with the given [id]
      */
-    suspend fun delete(id: IxId<UserDto>)
+    suspend fun delete(id: IxId<UserData>)
 }

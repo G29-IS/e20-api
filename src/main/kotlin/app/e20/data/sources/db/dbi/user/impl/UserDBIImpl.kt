@@ -1,7 +1,7 @@
 package app.e20.data.sources.db.dbi.user.impl
 
 import app.e20.core.logic.typedId.impl.IxId
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.user.UserData
 import app.e20.data.sources.db.dbi.user.UserDBI
 import app.e20.data.sources.db.schemas.user.UserEntity
 import app.e20.data.sources.db.schemas.user.UsersTable
@@ -14,30 +14,30 @@ import org.koin.core.annotation.Single
 
 @Single(createdAtStart = true)
 class UserDBIImpl : UserDBI {
-    private fun UserEntity.fromDto(userDto: UserDto) {
-        email = userDto.email
-        passwordHash = userDto.passwordHash
+    private fun UserEntity.fromDto(userData: UserData) {
+        email = userData.email
+        passwordHash = userData.passwordHash
     }
 
-    private fun UserEntity.toDto() = UserDto(
+    private fun UserEntity.toDto() = UserData(
         id = id.toIxId(),
         email = email,
         passwordHash = passwordHash,
     )
 
-    override suspend fun create(userDto: UserDto) {
+    override suspend fun create(userData: UserData) {
         dbQuery {
-            UserEntity.new(userDto.id.id) {
-                fromDto(userDto)
+            UserEntity.new(userData.id.id) {
+                fromDto(userData)
             }
         }
     }
 
-    override suspend fun get(id: IxId<UserDto>): UserDto? = dbQuery {
+    override suspend fun get(id: IxId<UserData>): UserData? = dbQuery {
         UserEntity.findById(id.id)
     }?.toDto()
 
-    override suspend fun get(email: String): UserDto? = dbQuery {
+    override suspend fun get(email: String): UserData? = dbQuery {
         UserEntity
             .find { UsersTable.email eq email }
             .limit(1)
@@ -45,7 +45,7 @@ class UserDBIImpl : UserDBI {
             ?.toDto()
     }
 
-    override suspend fun resetPassword(id: IxId<UserDto>, newPasswordHashed: String) {
+    override suspend fun resetPassword(id: IxId<UserData>, newPasswordHashed: String) {
         dbQuery {
             UsersTable.update({ UsersTable.id eq id.toEntityId(UsersTable) }) {
                 it[passwordHash] = newPasswordHashed
@@ -53,7 +53,7 @@ class UserDBIImpl : UserDBI {
         }
     }
 
-    override suspend fun delete(id: IxId<UserDto>) {
+    override suspend fun delete(id: IxId<UserData>) {
         dbQuery {
             UsersTable.deleteWhere { UsersTable.id eq id.toEntityId(UsersTable) }
         }

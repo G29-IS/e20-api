@@ -5,8 +5,8 @@ import app.e20.core.logic.DatetimeUtils
 import app.e20.core.logic.typedId.impl.IxId
 import app.e20.core.logic.typedId.toIxId
 import app.e20.data.daos.auth.UserSessionDao
-import app.e20.data.models.auth.UserAuthSessionDto
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.auth.UserAuthSessionData
+import app.e20.data.models.user.UserData
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.http.*
@@ -39,7 +39,7 @@ object JwtClaims {
 /**
  * Gets the Id of a UserDto from the auth-user-session UserSessionDto
  */
-fun PipelineContext<Unit, ApplicationCall>.userIdFromSession(): IxId<UserDto>? = call.principal<UserAuthSessionDto>()?.userId
+fun PipelineContext<Unit, ApplicationCall>.userIdFromSession(): IxId<UserData>? = call.principal<UserAuthSessionData>()?.userId
 
 fun Application.configureSecurity() {
     val userSessionDao by inject<UserSessionDao>()
@@ -57,8 +57,8 @@ fun Application.configureSecurity() {
             )
 
             validate { credentials ->
-                val userId: IxId<UserDto> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
-                val sessionId: IxId<UserAuthSessionDto> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
+                val userId: IxId<UserData> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
+                val sessionId: IxId<UserAuthSessionData> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
 
                 val session = userSessionDao.get(userId, sessionId)
 

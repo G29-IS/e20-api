@@ -2,7 +2,7 @@ package app.e20.core.logic.typedId.serialization
 
 import app.e20.core.logic.typedId.impl.IxId
 import app.e20.core.logic.typedId.newIxId
-import app.e20.data.models.user.UserDto
+import app.e20.data.models.user.UserData
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -18,7 +18,7 @@ class IdKotlinXSerializationModuleKtTest {
 
     @Test
     fun idSerialization() {
-        val id = newIxId<UserDto>()
+        val id = newIxId<UserData>()
         val serialized = json.encodeToString(id).let {
             it.substring(1, it.length - 1)
         }
@@ -41,7 +41,7 @@ class IdKotlinXSerializationModuleKtTest {
 
         @Serializable
         data class TestObject(
-            @Contextual val id: IxId<UserDto>,
+            @Contextual val id: IxId<UserData>,
             val name: String
         )
 

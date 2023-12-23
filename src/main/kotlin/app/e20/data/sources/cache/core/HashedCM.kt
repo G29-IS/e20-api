@@ -1,7 +1,7 @@
 package app.e20.data.sources.cache.core
 
 import app.e20.core.logic.ObjectMapper
-import app.e20.data.sources.cache.RedisClient
+import app.e20.core.clients.RedisClient
 
 /**
  * Hashed cache manager

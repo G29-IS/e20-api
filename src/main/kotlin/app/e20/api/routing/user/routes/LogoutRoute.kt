@@ -2,7 +2,7 @@ package app.e20.api.routing.user.routes
 
 import app.e20.api.routing.user.LogoutRoute
 import app.e20.data.daos.auth.UserSessionDao
-import app.e20.data.models.auth.UserAuthSessionDto
+import app.e20.data.models.auth.UserAuthSessionData
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -24,7 +24,7 @@ fun Route.logoutRoute() {
             }
         }
     }) {
-        val sessionData = call.principal<UserAuthSessionDto>()!!
+        val sessionData = call.principal<UserAuthSessionData>()!!
 
         userSessionDao.delete(sessionData.userId, sessionData.id)
 
