@@ -2,6 +2,12 @@ package app.e20.data.models.event
 
 import app.e20.core.logic.typedId.impl.IxId
 import app.e20.data.models.user.UserData
+import app.e20.data.validation.Validatable
+import app.e20.data.validation.Validations
+import io.konform.validation.Validation
+import io.konform.validation.jsonschema.maxLength
+import io.konform.validation.jsonschema.minLength
+import io.konform.validation.jsonschema.minimum
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -67,5 +73,41 @@ data class EventData(
         val visibility: EventVisibility,
         val availability: EventAvailability,
         val paymentLink: String?
-    )
+    ) : Validatable<EventCreateOrUpdateRequestData> {
+        override fun validate() = Validation {
+            EventCreateOrUpdateRequestData::name {
+                minLength(Validations.Event.minNameLength)
+                maxLength(Validations.Event.maxNameLength)
+            }
+            EventCreateOrUpdateRequestData::coverImageUrl {
+                minLength(Validations.minImageUrlLength)
+                maxLength(Validations.maxImageUrlLength)
+            }
+            EventCreateOrUpdateRequestData::description {
+                minLength(Validations.Event.minDescriptionLength)
+                maxLength(Validations.Event.maxDescriptionLength)
+            }
+            EventCreateOrUpdateRequestData::place {
+                EventPlaceData::name {
+                    minLength(Validations.Event.minPlaceNameLength)
+                    maxLength(Validations.Event.maxPlaceNameLength)
+                }
+                EventPlaceData::url {
+                    minLength(Validations.Event.minPlaceUrlLength)
+                    maxLength(Validations.Event.maxPlaceUrlLength)
+                }
+                EventPlaceData::address {
+                    minLength(Validations.Event.minPlaceAddressLength)
+                    maxLength(Validations.Event.maxPlaceAddressLength)
+                }
+            }
+            EventCreateOrUpdateRequestData::maxParticipants ifPresent {
+                minimum(Validations.Event.minParticipants)
+            }
+            EventCreateOrUpdateRequestData::paymentLink ifPresent {
+                minLength(Validations.Event.minPaymentLinkLength)
+                maxLength(Validations.Event.maxPaymentLinkLength)
+            }
+        }.invoke(this)
+    }
 }
