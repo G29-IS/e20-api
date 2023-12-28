@@ -1,7 +1,7 @@
 version: "3.8"
 name: "e20-dev-environment"
 services:
-  e20-postgres:
+  postgres:
     image: postgres
     restart: unless-stopped
     environment:
@@ -9,61 +9,61 @@ services:
       POSTGRES_USER: e20DevUser
       POSTGRES_PASSWORD: e20DevPassword
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - e20-dev-pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
-      - postgres-network
-  e20-adminer:
+      - e20-dev-postgres-network
+  adminer:
     image: adminer
     restart: always
     ports:
       - "8081:8080"
     networks:
-      - postgres-network
-  e20-redis:
+      - e20-dev-postgres-network
+  redis:
     image: redis:latest
     restart: unless-stopped
     volumes:
-      - redis:/data
+      - e20-dev-redis:/data
     ports:
       - "6379:6379"
     networks:
-      - redis-network
-  e20-redis-insight:
+      - e20-dev-redis-network
+  redis-insight:
     image: redislabs/redisinsight
     restart: unless-stopped
     ports:
       - "8082:8001"
     networks:
-      - redis-network
-  e20-prometheus:
+      - e20-dev-redis-network
+  prometheus:
     image: prom/prometheus
     ports:
       - "9090:9090"
     volumes:
       - "../prometheus/prometheus-monitoring.yml:/etc/prometheus/prometheus.yml"
     networks:
-      - monitor-net
-  e20-grafana:
+      - e20-dev-monitor-net
+  grafana:
     image: grafana/grafana
     restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
-      - grafana-storage:/var/lib/grafana
+      - e20-dev-grafana-storage:/var/lib/grafana
     networks:
-      - monitor-net
+      - e20-dev-monitor-net
 
 volumes:
-  redis: {}
-  pgdata: {}
-  grafana-storage: {}
+  e20-dev-redis: {}
+  e20-dev-pgdata: {}
+  e20-dev-grafana-storage: {}
 
 networks:
-  redis-network:
-    name: redis-network
-  postgres-network:
-    name: postgres-network
-  monitor-net:
-    name: monitor-net
+  e20-dev-redis-network:
+    name: e20-dev-redis-network
+  e20-dev-postgres-network:
+    name: e20-dev-postgres-network
+  e20-dev-monitor-net:
+    name: e20-dev-monitor-net

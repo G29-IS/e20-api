@@ -24,6 +24,15 @@ interface EventDao {
     suspend fun get(id: IxId<EventData>): EventData?
 
     /**
+     * Gets all the events organized by a user
+     *
+     * @param id organizer id
+     *
+     * @return a [List] of all the [EventData] organized by the user
+     */
+    suspend fun getOfOrganizer(id: IxId<UserData>): List<EventData>
+
+    /**
      * Gets all events in the range of [startDate] and [endDate]
      *
      * @return the [List] of [EventData]

@@ -1,6 +1,7 @@
 package app.e20.data.models.user
 
 import app.e20.core.logic.typedId.impl.IxId
+import app.e20.data.models.event.EventData
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -38,4 +39,10 @@ data class UserData(
     enum class UserGender {
         MALE, FEMALE, OTHER, NOT_SPECIFIED
     }
+
+    @Serializable
+    data class UserWithEventsOrganizedData(
+        val user: UserData,
+        val eventsOrganized: List<EventData>
+    )
 }

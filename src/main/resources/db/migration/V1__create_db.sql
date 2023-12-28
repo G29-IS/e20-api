@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS users (id uuid PRIMARY KEY, email VARCHAR(150) NOT NULL, password_hash VARCHAR(100) NULL, full_name VARCHAR(150) NOT NULL, surname VARCHAR(150) NOT NULL, username VARCHAR(100) NOT NULL, phone VARCHAR(20) NOT NULL, birth_date DATE NOT NULL, gender VARCHAR(20) NOT NULL, city_of_interest VARCHAR(150) NOT NULL, is_private BOOLEAN NOT NULL, profile_image_url VARCHAR(200) NOT NULL);
+ALTER TABLE users ADD CONSTRAINT users_email_unique UNIQUE (email);
+CREATE TABLE IF NOT EXISTS passwordreset (id SERIAL PRIMARY KEY, token VARCHAR(100) NOT NULL, id_user uuid NOT NULL, created_at BIGINT NOT NULL, expires_at BIGINT NOT NULL, CONSTRAINT fk_passwordreset_id_user__id FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE ON UPDATE RESTRICT);
+ALTER TABLE passwordreset ADD CONSTRAINT passwordreset_token_unique UNIQUE (token);
+CREATE INDEX passwordreset_id_user ON passwordreset (id_user);
+CREATE TABLE IF NOT EXISTS events (id uuid PRIMARY KEY, event_name VARCHAR(150) NOT NULL, cover_image_url VARCHAR(200) NOT NULL, id_organizer uuid NOT NULL, description VARCHAR(500) NOT NULL, opening_date_time TIMESTAMP NOT NULL, door_opening_date_time TIMESTAMP NOT NULL, event_type VARCHAR(20) NOT NULL, max_participants INT NULL, event_visibility VARCHAR(20) NOT NULL, availability VARCHAR(20) NOT NULL, event_link VARCHAR(200) NULL, is_modified BOOLEAN NOT NULL, times_shared BIGINT NOT NULL, CONSTRAINT fk_events_id_organizer__id FOREIGN KEY (id_organizer) REFERENCES users(id) ON DELETE CASCADE ON UPDATE RESTRICT);
+CREATE INDEX events_id_organizer ON events (id_organizer);
+CREATE TABLE IF NOT EXISTS eventplace (id SERIAL PRIMARY KEY, id_event uuid NOT NULL, place_name VARCHAR(150) NOT NULL, address VARCHAR(200) NOT NULL, url VARCHAR(200) NOT NULL, CONSTRAINT fk_eventplace_id_event__id FOREIGN KEY (id_event) REFERENCES events(id) ON DELETE CASCADE ON UPDATE RESTRICT);
+CREATE INDEX eventplace_id_event ON eventplace (id_event);

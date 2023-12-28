@@ -1,5 +1,6 @@
 package app.e20.data.sources.db.dbi.event.impl
 
+import app.e20.core.logic.DatetimeUtils
 import app.e20.core.logic.typedId.impl.IxId
 import app.e20.data.models.event.EventData
 import app.e20.data.models.user.UserData
@@ -8,6 +9,8 @@ import app.e20.data.sources.db.schemas.event.*
 import app.e20.data.sources.db.schemas.user.UsersTable
 import app.e20.data.sources.db.toEntityId
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDateTime
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -21,7 +24,7 @@ class EventDBIImpl : EventDBI {
     private fun userAndEventFilter(
         userId: IxId<UserData>,
         eventId: IxId<EventData>,
-    ) = Op.build { (EventTable.idOrganizer eq userId.toEntityId(UsersTable)) and (EventTable.id eq eventId.toEntityId(EventTable)) }
+    ) = Op.build { (EventsTable.idOrganizer eq userId.toEntityId(UsersTable)) and (EventsTable.id eq eventId.toEntityId(EventsTable)) }
 
     override suspend fun create(eventData: EventData) {
         dbQuery {
@@ -36,14 +39,19 @@ class EventDBIImpl : EventDBI {
     }
 
     override suspend fun get(id: IxId<EventData>): EventData? = dbQuery {
-        EventEntity.find { EventTable.id eq id.toEntityId(EventTable) }
+        EventEntity.find { EventsTable.id eq id.toEntityId(EventsTable) }
             .limit(1)
             .firstOrNull()
             ?.toData()
     }
 
+    override suspend fun getOfOrganizer(id: IxId<UserData>): List<EventData> = dbQuery {
+        EventEntity.find { EventsTable.idOrganizer eq id.toEntityId(UsersTable) }
+            .map { it.toData() }
+    }
+
     override suspend fun getForDates(startDate: LocalDateTime, endDate: LocalDateTime): List<EventData> = dbQuery {
-        EventEntity.find { EventTable.openingDateTime.between(startDate.toJavaLocalDateTime(), endDate.toJavaLocalDateTime())  }
+        EventEntity.find { EventsTable.openingDateTime.between(startDate.toJavaLocalDateTime(), endDate.toJavaLocalDateTime())  }
             .map { it.toData() }
     }
 
@@ -53,7 +61,10 @@ class EventDBIImpl : EventDBI {
         organizerId: IxId<UserData>,
         eventCreateOrUpdateRequestData: EventData.EventCreateOrUpdateRequestData
     ): Boolean = dbQuery {
-        val updated = EventTable.update({ userAndEventFilter(organizerId, id) }) {
+        val millisDifferenceFromOpening = eventCreateOrUpdateRequestData.openingDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds() - DatetimeUtils.currentMillis()
+        val shouldSetIsModified = millisDifferenceFromOpening > 0 && millisDifferenceFromOpening < (DatetimeUtils.oneDayMillis * 3)
+
+        val updated = EventsTable.update({ userAndEventFilter(organizerId, id) }) {
             it[name] = eventCreateOrUpdateRequestData.name
             it[coverImageUrl] = eventCreateOrUpdateRequestData.coverImageUrl
             it[description] = eventCreateOrUpdateRequestData.description
@@ -64,11 +75,13 @@ class EventDBIImpl : EventDBI {
             it[visibility] = eventCreateOrUpdateRequestData.visibility
             it[availability] = eventCreateOrUpdateRequestData.availability
             it[paymentLink] = eventCreateOrUpdateRequestData.paymentLink
-            // TODO: isModified property
+            if (shouldSetIsModified) {
+                it[isModified] = true
+            }
         } > 0
 
         if (updated) {
-            EventPlaceTable.deleteWhere { event eq id.toEntityId(EventTable) }
+            EventPlaceTable.deleteWhere { event eq id.toEntityId(EventsTable) }
             EventPlaceEntity.new {
                 fromData(eventCreateOrUpdateRequestData.place)
             }
@@ -78,6 +91,6 @@ class EventDBIImpl : EventDBI {
     }
 
     override suspend fun delete(id: IxId<EventData>, organizerId: IxId<UserData>): Boolean = dbQuery {
-        EventTable.deleteWhere { userAndEventFilter(organizerId, id) } > 0
+        EventsTable.deleteWhere { userAndEventFilter(organizerId, id) } > 0
     }
 }

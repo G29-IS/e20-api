@@ -1,20 +1,20 @@
 package app.e20.data.sources.db.schemas.event
 
 import app.e20.data.models.event.EventData
-import app.e20.data.sources.db.schemas.event.EventTable.availability
-import app.e20.data.sources.db.schemas.event.EventTable.coverImageUrl
-import app.e20.data.sources.db.schemas.event.EventTable.description
-import app.e20.data.sources.db.schemas.event.EventTable.doorOpeningDateTime
-import app.e20.data.sources.db.schemas.event.EventTable.id
-import app.e20.data.sources.db.schemas.event.EventTable.idOrganizer
-import app.e20.data.sources.db.schemas.event.EventTable.isModified
-import app.e20.data.sources.db.schemas.event.EventTable.maxParticipants
-import app.e20.data.sources.db.schemas.event.EventTable.name
-import app.e20.data.sources.db.schemas.event.EventTable.openingDateTime
-import app.e20.data.sources.db.schemas.event.EventTable.paymentLink
-import app.e20.data.sources.db.schemas.event.EventTable.timesShared
-import app.e20.data.sources.db.schemas.event.EventTable.type
-import app.e20.data.sources.db.schemas.event.EventTable.visibility
+import app.e20.data.sources.db.schemas.event.EventsTable.availability
+import app.e20.data.sources.db.schemas.event.EventsTable.coverImageUrl
+import app.e20.data.sources.db.schemas.event.EventsTable.description
+import app.e20.data.sources.db.schemas.event.EventsTable.doorOpeningDateTime
+import app.e20.data.sources.db.schemas.event.EventsTable.id
+import app.e20.data.sources.db.schemas.event.EventsTable.idOrganizer
+import app.e20.data.sources.db.schemas.event.EventsTable.isModified
+import app.e20.data.sources.db.schemas.event.EventsTable.maxParticipants
+import app.e20.data.sources.db.schemas.event.EventsTable.name
+import app.e20.data.sources.db.schemas.event.EventsTable.openingDateTime
+import app.e20.data.sources.db.schemas.event.EventsTable.paymentLink
+import app.e20.data.sources.db.schemas.event.EventsTable.timesShared
+import app.e20.data.sources.db.schemas.event.EventsTable.type
+import app.e20.data.sources.db.schemas.event.EventsTable.visibility
 import app.e20.data.sources.db.schemas.user.UsersTable
 import app.e20.data.sources.db.toEntityId
 import app.e20.data.sources.db.toIxId
@@ -29,6 +29,8 @@ import org.jetbrains.exposed.sql.javatime.datetime
 import java.util.*
 
 /**
+ * Named "Events" because "Event" is a reserved keyword
+ *
  * @property id
  * @property name
  * @property coverImageUrl
@@ -44,20 +46,20 @@ import java.util.*
  * @property isModified
  * @property timesShared
  */
-object EventTable : UUIDTable() {
+object EventsTable : UUIDTable() {
     val name = varchar("event_name", 150)
     val coverImageUrl = varchar("cover_image_url", 200) // TODO
-    val idOrganizer = EventTable.reference(
+    val idOrganizer = EventsTable.reference(
         name = "id_organizer",
         foreign = UsersTable,
         onDelete = ReferenceOption.CASCADE // TODO
-    )
+    ).index()
     val description = varchar("description", 500)
     val openingDateTime = datetime("opening_date_time")
     val doorOpeningDateTime = datetime("door_opening_date_time")
     val type = enumerationByName<EventData.EventType>("event_type", 20)
     val maxParticipants = integer("max_participants").nullable()
-    val visibility = enumerationByName<EventData.EventVisibility>("event_type", 20)
+    val visibility = enumerationByName<EventData.EventVisibility>("event_visibility", 20)
     val availability = enumerationByName<EventData.EventAvailability>("availability", 20)
     val paymentLink = varchar("event_link", 200).nullable()
     val isModified = bool("is_modified")
@@ -82,21 +84,21 @@ object EventTable : UUIDTable() {
  * @property timesShared
  */
 class EventEntity(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<EventEntity>(EventTable)
+    companion object : UUIDEntityClass<EventEntity>(EventsTable)
 
-    var name by EventTable.name
-    var coverImageUrl by EventTable.coverImageUrl
-    var idOrganizer by EventTable.idOrganizer
-    var description by EventTable.description
-    var openingDateTime by EventTable.openingDateTime
-    var doorOpeningDateTime by EventTable.doorOpeningDateTime
-    var type by EventTable.type
-    var maxParticipants by EventTable.maxParticipants
-    var visibility by EventTable.visibility
-    var paymentLink by EventTable.paymentLink
-    var availability by EventTable.availability
-    var isModified by EventTable.isModified
-    var timesShared by EventTable.timesShared
+    var name by EventsTable.name
+    var coverImageUrl by EventsTable.coverImageUrl
+    var idOrganizer by EventsTable.idOrganizer
+    var description by EventsTable.description
+    var openingDateTime by EventsTable.openingDateTime
+    var doorOpeningDateTime by EventsTable.doorOpeningDateTime
+    var type by EventsTable.type
+    var maxParticipants by EventsTable.maxParticipants
+    var visibility by EventsTable.visibility
+    var paymentLink by EventsTable.paymentLink
+    var availability by EventsTable.availability
+    var isModified by EventsTable.isModified
+    var timesShared by EventsTable.timesShared
 
     val place by EventPlaceEntity backReferencedOn EventPlaceTable.event
 }

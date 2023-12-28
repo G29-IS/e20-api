@@ -44,6 +44,10 @@ class EventDaoImpl(
         return eventDBI.get(id)
     }
 
+    override suspend fun getOfOrganizer(id: IxId<UserData>): List<EventData> {
+        return eventDBI.getOfOrganizer(id)
+    }
+
     override suspend fun getForDates(startDate: LocalDateTime, endDate: LocalDateTime): List<EventData> {
         return eventDBI.getForDates(startDate, endDate)
     }

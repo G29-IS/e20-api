@@ -20,7 +20,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
 object EventPlaceTable: IntIdTable() {
     val event = reference(
         name = "id_event",
-        foreign = EventTable,
+        foreign = EventsTable,
         onDelete = ReferenceOption.CASCADE,
     ).index()
     val name = varchar("place_name", 150)
