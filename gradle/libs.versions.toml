@@ -83,6 +83,7 @@ ktor-server-auth-jwt = { group = "io.ktor", name = "ktor-server-auth-jwt", versi
 ktor-server-resources = { group = "io.ktor", name = "ktor-server-resources", version.ref = "ktor" }
 ktor-server-request-validation = { group = "io.ktor", name = "ktor-server-request-validation", version.ref = "ktor" }
 ktor-server-rate-limit = { group = "io.ktor", name = "ktor-server-rate-limit", version.ref = "ktor" }
+ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder", version.ref = "ktor" }
 ktor-micrometer = { group = "io.ktor", name = "ktor-server-metrics-micrometer", version.ref = "ktor" }
 micrometer-registry-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus", version.ref = "micrometerRegistryPrometheus" }
 ktor-swagger = { group = "io.github.smiley4", name = "ktor-swagger-ui", version.ref = "ktorSwagger" }
@@ -138,6 +139,7 @@ ktor-server = [
     "ktor-server-resources",
     "ktor-server-request-validation",
     "ktor-server-rate-limit",
+    "ktor-server-html-builder",
     "ktor-swagger",
     "json-schema-generator",
     "konform"

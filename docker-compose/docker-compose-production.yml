@@ -2,6 +2,7 @@ version: "3.8"
 services:
   e20:
     image: eu.gcr.io/e-20-408110/e-20-api:latest
+    restart: unless-stopped
     container_name: "e20-api"
     env_file:
       - .env
@@ -9,6 +10,7 @@ services:
       - "8080:${PORT}"
   prometheus:
     image: prom/prometheus
+    restart: unless-stopped
     ports:
       - "9090:9090"
     volumes:
@@ -17,6 +19,7 @@ services:
       - monitor-net
   grafana:
     image: grafana/grafana
+    restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:

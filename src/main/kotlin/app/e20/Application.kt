@@ -13,8 +13,6 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.slf4j.LoggerFactory
 
-private val logger = KotlinLogging.logger { }
-
 fun main() {
     /**
      * Very important performance improvement ^^

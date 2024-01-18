@@ -21,6 +21,9 @@ class PasswordForgottenRoute(val email: String)
 @Resource("/reset-password")
 class ResetPasswordRoute(val token: String)
 
+@Resource("/reset-password-webpage")
+class ResetPasswordWebpageRoute(val token: String)
+
 @Resource("/me")
 class MeRoute
 

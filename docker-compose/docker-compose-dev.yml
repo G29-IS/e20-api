@@ -1,9 +1,10 @@
 version: "3.8"
 name: "e20-dev-environment"
+
 services:
   postgres:
     image: postgres
-    restart: unless-stopped
+    restart: no
     environment:
       POSTGRES_DB: e20devdb
       POSTGRES_USER: e20DevUser
@@ -16,14 +17,14 @@ services:
       - e20-dev-postgres-network
   adminer:
     image: adminer
-    restart: always
+    restart: no
     ports:
       - "8081:8080"
     networks:
       - e20-dev-postgres-network
   redis:
     image: redis:latest
-    restart: unless-stopped
+    restart: no
     volumes:
       - e20-dev-redis:/data
     ports:
@@ -32,13 +33,14 @@ services:
       - e20-dev-redis-network
   redis-insight:
     image: redislabs/redisinsight
-    restart: unless-stopped
+    restart: no
     ports:
       - "8082:8001"
     networks:
       - e20-dev-redis-network
   prometheus:
     image: prom/prometheus
+    restart: no
     ports:
       - "9090:9090"
     volumes:
@@ -47,7 +49,7 @@ services:
       - e20-dev-monitor-net
   grafana:
     image: grafana/grafana
-    restart: unless-stopped
+    restart: no
     ports:
       - "3000:3000"
     volumes:
