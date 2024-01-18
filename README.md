@@ -59,3 +59,8 @@ Ci sono diverse dashboard già esistenti che si possono usare.
 Una dashboard fatta abbastanza bene è [questa qui](https://grafana.com/grafana/dashboards/4701-jvm-micrometer/)  
 
 Per crearla clicca nell'hamburger menu a sinistra della home di Grafana, poi clicca `Dashboards` e successivamente `New > New dashboard` in alto a destra, poi `Import dashboard` ed inserisci il seguente ID a sinistra del pulsante `Load`: `4701`  
+
+### Error logging
+Per il monitoraggio degli errori viene utilizzato [Sentry](https://sentry.io).  
+È necessario avere la variabile di ambiente `SENTRY_AUTH_TOKEN` impostata per permettere un corretto funzionamento del tracking degli errori.  
+Un `Auth token` può essere ottenuto a [questo link](https://e20.sentry.io/projects/api/getting-started/?product=performance-monitoring#:~:text=Organization%20Auth%20Tokens).  
