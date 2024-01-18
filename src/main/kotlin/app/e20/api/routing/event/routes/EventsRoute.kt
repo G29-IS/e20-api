@@ -13,9 +13,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.*
-import kotlinx.datetime.TimeZone
 import org.koin.ktor.ext.inject
-import java.util.*
 
 fun Route.eventsRoute() {
     val eventDao by inject<EventDao>()

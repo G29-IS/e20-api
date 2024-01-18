@@ -1,11 +1,11 @@
 package app.e20.data.sources.cache.cm.impl
 
 import app.e20.config.ApiConfig
+import app.e20.core.clients.RedisClient
 import app.e20.core.logic.ObjectMapper
 import app.e20.core.logic.typedId.impl.IxId
 import app.e20.data.models.auth.UserAuthSessionData
 import app.e20.data.models.user.UserData
-import app.e20.core.clients.RedisClient
 import app.e20.data.sources.cache.cm.UserSessionCM
 import app.e20.data.sources.cache.core.ExpiringCM
 import org.koin.core.annotation.Single

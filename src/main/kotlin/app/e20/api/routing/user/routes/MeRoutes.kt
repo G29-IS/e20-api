@@ -1,6 +1,5 @@
 package app.e20.api.routing.user.routes
 
-import app.e20.api.plugins.userIdFromSession
 import app.e20.api.plugins.userIdFromSessionOrThrow
 import app.e20.api.routing.user.MeRoute
 import app.e20.core.exceptions.AuthenticationException

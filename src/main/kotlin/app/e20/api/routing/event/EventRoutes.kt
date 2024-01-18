@@ -9,7 +9,6 @@ import io.ktor.server.routing.*
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
-import java.util.*
 
 @Resource("/events")
 class EventsRoute(

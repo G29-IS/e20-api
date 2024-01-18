@@ -1,8 +1,6 @@
 package app.e20.api.plugins
 
 import app.e20.config.ApplicationConfig
-import app.e20.core.clients.BrevoClient
-import app.e20.core.clients.RedisClient
 import app.e20.di.ClientModule
 import app.e20.di.DataModule
 import app.e20.di.IClosableComponent
@@ -13,7 +11,6 @@ import kotlinx.coroutines.runBlocking
 import org.koin.core.logger.Level
 import org.koin.ksp.generated.module
 import org.koin.ktor.ext.getKoin
-import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.ktor.plugin.KoinApplicationStarted
 import org.koin.ktor.plugin.KoinApplicationStopPreparing

@@ -7,7 +7,6 @@ import app.e20.config.ApplicationConfig
 import app.e20.config.core.ConfigurationManager
 import app.e20.config.core.ConfigurationReader
 import ch.qos.logback.classic.Logger
-import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
