@@ -1,6 +1,9 @@
 package app.e20.core.logic.typedId.impl
 
 import app.e20.core.logic.typedId.Id
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
+import java.io.Serial
 import java.util.*
 
 /**

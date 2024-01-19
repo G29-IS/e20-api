@@ -1,8 +1,8 @@
 [versions]
-kotlin="1.9.0"
+kotlin="1.9.22"
 kotlinxCoroutines="1.7.3"
 reflections="0.10.2"
-ksp="1.9.0-1.0.13"
+ksp="1.9.22-1.0.17"
 
 sentry="4.2.0"
 sentryLogback="7.2.0"
@@ -99,6 +99,7 @@ ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref =
 ktor-client-apache = { group = "io.ktor", name = "ktor-client-apache", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-resources = { group = "io.ktor", name = "ktor-client-resources", version.ref = "ktor" }
 
 google-api-client = { group = "com.google.api-client", name = "google-api-client", version.ref = "googleApiClient" }
 spring-security-crypto = { group = "org.springframework.security", name = "spring-security-crypto", version.ref = "springSecurityCrypto" }
@@ -156,6 +157,7 @@ ktor-client = [
     "ktor-client-logging",
     "ktor-serialization",
     "ktor-client-content-negotiation",
+    "ktor-client-resources"
 ]
 
 spring-security = [

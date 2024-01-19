@@ -1,10 +1,14 @@
 package app.e20.data.sources.db.schemas.event
 
+import app.e20.core.logic.typedId.impl.IxId
+import app.e20.data.models.event.EventData
 import app.e20.data.models.event.EventPlaceData
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.address
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.id
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.name
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.url
+import app.e20.data.sources.db.schemas.user.UsersTable.nullable
+import app.e20.data.sources.db.toEntityId
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -23,9 +27,9 @@ object EventPlaceTable: IntIdTable() {
         foreign = EventsTable,
         onDelete = ReferenceOption.CASCADE,
     ).index()
-    val name = varchar("place_name", 150)
+    val name = varchar("place_name", 150).nullable()
     val address = varchar("address", 200)
-    val url = varchar("url", 200)
+    val url = varchar("url", 200).nullable()
 }
 
 /**
@@ -37,6 +41,7 @@ object EventPlaceTable: IntIdTable() {
 class EventPlaceEntity(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<EventPlaceEntity>(EventPlaceTable)
 
+    var event by EventPlaceTable.event
     var name by EventPlaceTable.name
     var address by EventPlaceTable.address
     var url by EventPlaceTable.url
@@ -45,7 +50,8 @@ class EventPlaceEntity(id: EntityID<Int>) : IntEntity(id) {
     val eventEntity by EventEntity referencedOn EventPlaceTable.event
 }
 
-fun EventPlaceEntity.fromData(eventPlaceData: EventPlaceData) {
+fun EventPlaceEntity.fromData(eventId: IxId<EventData>, eventPlaceData: EventPlaceData) {
+    event = eventId.toEntityId(EventsTable)
     name = eventPlaceData.name
     address = eventPlaceData.address
     url = eventPlaceData.url

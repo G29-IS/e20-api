@@ -54,6 +54,10 @@ sourceSets.main {
 
 tasks.test {
     useJUnitPlatform()
+
+    this.testLogging {
+        this.showStandardStreams = true
+    }
 }
 
 tasks {

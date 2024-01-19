@@ -33,7 +33,7 @@ class EventDBIImpl : EventDBI {
             }
 
             EventPlaceEntity.new {
-                fromData(eventData.place)
+                fromData(eventData.idEvent, eventData.place)
             }
         }
     }
@@ -83,7 +83,7 @@ class EventDBIImpl : EventDBI {
         if (updated) {
             EventPlaceTable.deleteWhere { event eq id.toEntityId(EventsTable) }
             EventPlaceEntity.new {
-                fromData(eventCreateOrUpdateRequestData.place)
+                fromData(id, eventCreateOrUpdateRequestData.place)
             }
         }
 

@@ -65,8 +65,16 @@ fun Application.configureSecurity() {
             )
 
             validate { credentials ->
-                val userId: IxId<UserData> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
-                val sessionId: IxId<UserAuthSessionData> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM).asString().toIxId()
+                val userId: IxId<UserData> = credentials.payload.getClaim(JwtClaims.JWT_USER_ID_CLAIM)
+                    .asString()
+                    .takeIf { it.isNotEmpty() }
+                    ?.toIxId()
+                    ?: return@validate null
+                val sessionId: IxId<UserAuthSessionData> = credentials.payload.getClaim(JwtClaims.JWT_SESSION_ID_CLAIM)
+                    .asString()
+                    .takeIf { it.isNotEmpty() }
+                    ?.toIxId()
+                    ?: return@validate null
 
                 val session = userSessionDao.get(userId, sessionId)
 

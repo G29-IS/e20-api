@@ -42,7 +42,9 @@ fun Route.eventsRoute() {
             }
         }
     }) {
-        val startDate = it.dateStart ?: DatetimeUtils.currentLocalDateTime()
+        val startDate = it.dateStart ?: DatetimeUtils.currentInstant()
+            .minus(1, DateTimeUnit.MONTH, TimeZone.UTC)
+            .toLocalDateTime(TimeZone.UTC)
         val endDate = it.dateEnd ?: DatetimeUtils.currentInstant()
             .plus(1, DateTimeUnit.MONTH, TimeZone.UTC)
             .toLocalDateTime(TimeZone.UTC)

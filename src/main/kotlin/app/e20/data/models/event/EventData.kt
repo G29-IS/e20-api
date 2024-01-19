@@ -88,11 +88,11 @@ data class EventData(
                 maxLength(Validations.Event.maxDescriptionLength)
             }
             EventCreateOrUpdateRequestData::place {
-                EventPlaceData::name {
+                EventPlaceData::name ifPresent {
                     minLength(Validations.Event.minPlaceNameLength)
                     maxLength(Validations.Event.maxPlaceNameLength)
                 }
-                EventPlaceData::url {
+                EventPlaceData::url ifPresent {
                     minLength(Validations.Event.minPlaceUrlLength)
                     maxLength(Validations.Event.maxPlaceUrlLength)
                 }
