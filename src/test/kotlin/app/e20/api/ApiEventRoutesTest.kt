@@ -28,10 +28,31 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import java.util.*
 
+/*
+TODO:
+- invalid event data test
+- unauthenticated request test
+- event not found request
+ */
 @TestMethodOrder(OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ApiTest {
+class ApiEventRoutesTest {
     private var authToken: String? = null
+
+    private val eventCreateData = EventData.EventCreateOrUpdateRequestData(
+        name = "testing-${UUID.randomUUID().toString().take(16)}",
+        coverImageUrl = "missing-image",
+        description = "test event",
+        place = EventPlaceData("test location", "test address", null),
+        openingDateTime = Clock.System.now().plus(24, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.UTC),
+        doorOpeningDateTime = Clock.System.now().plus(25, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.UTC),
+        type = EventData.EventType.PRIVATEPARTY,
+        maxParticipants = 45,
+        visibility = EventData.EventVisibility.PUBLIC,
+        availability = EventData.EventAvailability.AVAILABLE,
+        paymentLink = null
+    )
+    private var createdEvent: EventData? = null
 
     companion object {
         private lateinit var httpClient: HttpClient
@@ -93,29 +114,10 @@ class ApiTest {
 
     @Test
     @Order(2)
-    fun `test events`() {
+    fun `create event expect success`() {
         runBlocking {
-            assert(authToken != null)
-
-            //////////////////////
-            /// EVENT CREATION ///
-            //////////////////////
-            val testEventCreateData = EventData.EventCreateOrUpdateRequestData(
-                name = "testing-${UUID.randomUUID().toString().take(16)}",
-                coverImageUrl = "missing-image",
-                description = "test event",
-                place = EventPlaceData("test location", "test address", null),
-                openingDateTime = Clock.System.now().plus(24, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.UTC),
-                doorOpeningDateTime = Clock.System.now().plus(25, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.UTC),
-                type = EventData.EventType.PRIVATEPARTY,
-                maxParticipants = 45,
-                visibility = EventData.EventVisibility.PUBLIC,
-                availability = EventData.EventAvailability.AVAILABLE,
-                paymentLink = null
-            )
-
             val createEventRes = httpClient.post(EventsRoute()) {
-                setBody(testEventCreateData)
+                setBody(eventCreateData)
                 headers {
                     bearerAuth(authToken!!)
                 }
@@ -123,16 +125,20 @@ class ApiTest {
 
             assert(createEventRes.status.value == 200)
 
-            val createdEvent = try {
+            createdEvent = try {
                 createEventRes.body<EventData>()
             } catch (e: Exception) {
                 fail(e)
             }
-            assert(createdEvent.name == testEventCreateData.name)
 
-            //////////////////////
-            /// GET ALL EVENTS ///
-            //////////////////////
+            assert(createdEvent?.name == eventCreateData.name)
+        }
+    }
+
+    @Test
+    @Order(3)
+    fun `list event expect created event in list`() {
+        runBlocking {
             val getAllRes = httpClient.get(EventsRoute()) {
                 headers {
                     bearerAuth(authToken!!)
@@ -146,15 +152,19 @@ class ApiTest {
             } catch (e: Exception) {
                 fail(e)
             }
-            assert(allEvents.any { it.name == createdEvent.name })
 
-            //////////////////////////
-            /// GET SPECIFIC EVENT ///
-            //////////////////////////
+            assert(allEvents.any { it.name == eventCreateData.name })
+        }
+    }
+
+    @Test
+    @Order(4)
+    fun `get created event expect success`() {
+        runBlocking {
             val getRes = httpClient.get(
                 EventsRoute.EventRoute(
                     parent = EventsRoute(),
-                    id = createdEvent.idEvent
+                    id = createdEvent!!.idEvent
                 )
             ) {
                 headers {
@@ -169,25 +179,29 @@ class ApiTest {
             } catch (e: Exception) {
                 fail(e)
             }
-            assert(specificEvent.name == createdEvent.name)
 
-            ////////////////////
-            /// UPDATE EVENT ///
-            ////////////////////
-            val testEventUpdateData = testEventCreateData.copy(
+            assert(specificEvent.name == eventCreateData.name)
+        }
+    }
+
+    @Test
+    @Order(5)
+    fun `update event expect success`() {
+        runBlocking {
+            val eventUpdateData = eventCreateData.copy(
                 name = "updated testing-${UUID.randomUUID().toString().take(16)}"
             )
 
             val updateRes = httpClient.put(
                 EventsRoute.EventRoute(
                     parent = EventsRoute(),
-                    id = createdEvent.idEvent
+                    id = createdEvent!!.idEvent
                 )
             ) {
                 headers {
                     bearerAuth(authToken!!)
                 }
-                setBody(testEventUpdateData)
+                setBody(eventUpdateData)
             }
 
             assert(updateRes.status.value == 200)
@@ -197,16 +211,19 @@ class ApiTest {
             } catch (e: Exception) {
                 fail(e)
             }
-            assert(updatedEvent.name == testEventUpdateData.name)
 
+            assert(updatedEvent.name == eventUpdateData.name)
+        }
+    }
 
-            ////////////////////
-            /// DELETE EVENT ///
-            ////////////////////
+    @Test
+    @Order(6)
+    fun `delete event expect success`() {
+        runBlocking {
             val deleteEventRes = httpClient.delete(
                 EventsRoute.EventRoute(
                     parent = EventsRoute(),
-                    id = createdEvent.idEvent
+                    id = createdEvent!!.idEvent
                 )
             ) {
                 headers {
