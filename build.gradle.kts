@@ -40,8 +40,11 @@ dependencies {
     implementation(libs.jedis)
     implementation(libs.google.api.client)
 
-    testImplementation(libs.junit)
     testImplementation(kotlin("test"))
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 ksp {
@@ -54,10 +57,6 @@ sourceSets.main {
 
 tasks.test {
     useJUnitPlatform()
-
-    this.testLogging {
-        this.showStandardStreams = true
-    }
 }
 
 tasks {

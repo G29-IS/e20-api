@@ -1,4 +1,4 @@
-package app.e20.core.logic
+package app.e20.api
 
 import app.e20.api.routing.auth.LoginRoute
 import app.e20.api.routing.event.EventsRoute
@@ -21,50 +21,58 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.*
+import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
-import java.util.UUID
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
+import java.util.*
 
+@TestMethodOrder(OrderAnnotation::class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ApiTest {
-    private val httpClient: HttpClient
     private var authToken: String? = null
 
-    init {
-        /**
-         * Load configuration properties (environment)
-         */
-        val configInitializer = ConfigurationManager(
-            packageName = ConfigurationManager.DEFAULT_CONFIG_PACKAGE,
-            ConfigurationReader::read
-        )
+    companion object {
+        private lateinit var httpClient: HttpClient
 
-        configInitializer.initialize()
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            /**
+             * Load configuration properties (environment)
+             */
+            val configInitializer = ConfigurationManager(
+                packageName = ConfigurationManager.DEFAULT_CONFIG_PACKAGE,
+                ConfigurationReader::read
+            )
 
-        httpClient = HttpClient(Apache) {
-            install(Logging) {
-                level = LogLevel.NONE
-            }
-            install(ContentNegotiation) {
-                json(Json {
+            configInitializer.initialize()
+
+            httpClient = HttpClient(Apache) {
+                install(Logging) {
+                    level = LogLevel.NONE
+                }
+                install(ContentNegotiation) {
+                    json(Json {
+                        serializersModule = IdKotlinXSerializationModule
+                    })
+                }
+                install(Resources) {
                     serializersModule = IdKotlinXSerializationModule
-                })
-            }
-            install(Resources) {
-                serializersModule = IdKotlinXSerializationModule
-            }
-            defaultRequest {
-                contentType(ContentType.Application.Json)
-                accept(ContentType.Application.Json)
-                url("http://localhost:${ApiConfig.port}/")
+                }
+                defaultRequest {
+                    contentType(ContentType.Application.Json)
+                    accept(ContentType.Application.Json)
+                    url("http://localhost:${ApiConfig.port}/")
+                }
             }
         }
     }
 
-    @BeforeEach
-    fun testLoginRoute() {
+    @Test
+    @Order(1)
+    fun `perform login expect auth token`() {
         runBlocking {
             val res = httpClient.post(LoginRoute()) {
                 setBody(LoginCredentials("default@gmail.com", "default"))
@@ -84,7 +92,8 @@ class ApiTest {
     }
 
     @Test
-    fun testSuccessfulEventRoutes() {
+    @Order(2)
+    fun `test events`() {
         runBlocking {
             assert(authToken != null)
 
@@ -142,10 +151,12 @@ class ApiTest {
             //////////////////////////
             /// GET SPECIFIC EVENT ///
             //////////////////////////
-            val getRes = httpClient.get(EventsRoute.EventRoute(
-                parent = EventsRoute(),
-                id = createdEvent.idEvent
-            )) {
+            val getRes = httpClient.get(
+                EventsRoute.EventRoute(
+                    parent = EventsRoute(),
+                    id = createdEvent.idEvent
+                )
+            ) {
                 headers {
                     bearerAuth(authToken!!)
                 }
@@ -167,10 +178,12 @@ class ApiTest {
                 name = "updated testing-${UUID.randomUUID().toString().take(16)}"
             )
 
-            val updateRes = httpClient.put(EventsRoute.EventRoute(
-                parent = EventsRoute(),
-                id = createdEvent.idEvent
-            )) {
+            val updateRes = httpClient.put(
+                EventsRoute.EventRoute(
+                    parent = EventsRoute(),
+                    id = createdEvent.idEvent
+                )
+            ) {
                 headers {
                     bearerAuth(authToken!!)
                 }
@@ -190,10 +203,12 @@ class ApiTest {
             ////////////////////
             /// DELETE EVENT ///
             ////////////////////
-            val deleteEventRes = httpClient.delete(EventsRoute.EventRoute(
-                parent = EventsRoute(),
-                id = createdEvent.idEvent
-            )) {
+            val deleteEventRes = httpClient.delete(
+                EventsRoute.EventRoute(
+                    parent = EventsRoute(),
+                    id = createdEvent.idEvent
+                )
+            ) {
                 headers {
                     bearerAuth(authToken!!)
                 }
