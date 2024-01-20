@@ -5,7 +5,9 @@ import app.e20.api.routing.event.EventsRoute
 import app.e20.config.ApiConfig
 import app.e20.config.core.ConfigurationManager
 import app.e20.config.core.ConfigurationReader
+import app.e20.core.logic.typedId.newIxId
 import app.e20.core.logic.typedId.serialization.IdKotlinXSerializationModule
+import app.e20.core.logic.typedId.toIxId
 import app.e20.data.models.auth.LoginCredentials
 import app.e20.data.models.event.EventData
 import app.e20.data.models.event.EventPlaceData
@@ -30,8 +32,6 @@ import java.util.*
 
 /*
 TODO:
-- invalid event data test
-- unauthenticated request test
 - event not found request
  */
 @TestMethodOrder(OrderAnnotation::class)
@@ -93,7 +93,7 @@ class ApiEventRoutesTest {
 
     @Test
     @Order(1)
-    fun `list events no auth expect failure`() {
+    fun `list events no auth expect unauthenticated`() {
         runBlocking {
             val getAllRes = httpClient.get(EventsRoute()) {
                 headers {
@@ -107,7 +107,7 @@ class ApiEventRoutesTest {
 
     @Test
     @Order(2)
-    fun `create event no auth expect failure`() {
+    fun `create event no auth expect unauthenticated`() {
         runBlocking {
             val createEventRes = httpClient.post(EventsRoute()) {
                 setBody(eventCreateData)
@@ -247,7 +247,7 @@ class ApiEventRoutesTest {
 
     @Test
     @Order(8)
-    fun `update event with invalid data expect failure`() {
+    fun `update event with invalid data expect bad request`() {
         runBlocking {
             val eventUpdateData = eventCreateData.copy(
                 name = "updated testing-${UUID.randomUUID().toString().take(16)}",
@@ -292,7 +292,7 @@ class ApiEventRoutesTest {
 
     @Test
     @Order(10)
-    fun `create event with invalid data expect failure`() {
+    fun `create event with invalid data expect bad request`() {
         runBlocking {
             val createEventRes = httpClient.post(EventsRoute()) {
                 setBody(
@@ -307,6 +307,30 @@ class ApiEventRoutesTest {
             }
 
             assert(createEventRes.status.value == 400)
+        }
+    }
+
+    @Test
+    @Order(11)
+    fun `update missing event expect not found`() {
+        runBlocking {
+            val eventUpdateData = eventCreateData.copy(
+                name = "unknown event",
+            )
+
+            val updateRes = httpClient.put(
+                EventsRoute.EventRoute(
+                    parent = EventsRoute(),
+                    id = newIxId()
+                )
+            ) {
+                headers {
+                    bearerAuth(authToken!!)
+                }
+                setBody(eventUpdateData)
+            }
+
+            assert(updateRes.status.value == 404)
         }
     }
 }
