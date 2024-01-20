@@ -1,5 +1,6 @@
 package app.e20.api.routing.event.routes
 
+import app.e20.api.plugins.AuthenticationMethods
 import app.e20.api.plugins.userIdFromSessionOrThrow
 import app.e20.api.routing.event.EventsRoute
 import app.e20.data.daos.event.EventDao
@@ -9,6 +10,7 @@ import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.put
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -28,36 +30,38 @@ fun Route.eventRoute() {
         call.respond(event)
     }
 
-    put<EventsRoute.EventRoute>({
-        tags = listOf("event")
-        operationId = "update-event"
-        summary = "updates a single event"
-    }) {
-        val updateEventData = call.receive<EventData.EventCreateOrUpdateRequestData>()
+    authenticate(AuthenticationMethods.USER_SESSION_AUTH) {
+        put<EventsRoute.EventRoute>({
+            tags = listOf("event")
+            operationId = "update-event"
+            summary = "updates a single event"
+        }) {
+            val updateEventData = call.receive<EventData.EventCreateOrUpdateRequestData>()
 
-        val updatedEvent = eventDao.update(
-            id = it.id,
-            organizerId = userIdFromSessionOrThrow(),
-            eventCreateOrUpdateRequestData = updateEventData
-        ) ?: call.respond(HttpStatusCode.NotFound)
+            val updatedEvent = eventDao.update(
+                id = it.id,
+                organizerId = userIdFromSessionOrThrow(),
+                eventCreateOrUpdateRequestData = updateEventData
+            ) ?: call.respond(HttpStatusCode.NotFound)
 
-        call.respond(updatedEvent)
-    }
+            call.respond(updatedEvent)
+        }
 
-    delete<EventsRoute.EventRoute>({
-        tags = listOf("event")
-        operationId = "delete-event"
-        summary = "deletes a single event"
-    }) {
-        val deleted = eventDao.delete(
-            id = it.id,
-            organizerId = userIdFromSessionOrThrow()
-        )
+        delete<EventsRoute.EventRoute>({
+            tags = listOf("event")
+            operationId = "delete-event"
+            summary = "deletes a single event"
+        }) {
+            val deleted = eventDao.delete(
+                id = it.id,
+                organizerId = userIdFromSessionOrThrow()
+            )
 
-        if (deleted) {
-            call.respond(HttpStatusCode.OK)
-        } else {
-            call.respond(HttpStatusCode.NotFound)
+            if (deleted) {
+                call.respond(HttpStatusCode.OK)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
         }
     }
 }

@@ -32,10 +32,10 @@ class UserRoute(@Contextual val id: IxId<UserData>)
 
 fun Route.userRoutes() {
     passwordOperationRoutes()
+    userRoute()
 
     authenticate(AuthenticationMethods.USER_SESSION_AUTH) {
         logoutRoute()
         meRoutes()
-        userRoute()
     }
 }

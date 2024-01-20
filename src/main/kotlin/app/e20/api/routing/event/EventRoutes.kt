@@ -23,8 +23,6 @@ class EventsRoute(
 }
 
 fun Route.eventRoutes() {
-    authenticate(AuthenticationMethods.USER_SESSION_AUTH) {
-        eventsRoute()
-        eventRoute()
-    }
+    eventsRoute()
+    eventRoute()
 }

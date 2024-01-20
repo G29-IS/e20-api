@@ -1,5 +1,6 @@
 package app.e20.api.routing.event.routes
 
+import app.e20.api.plugins.AuthenticationMethods
 import app.e20.api.plugins.userIdFromSessionOrThrow
 import app.e20.api.routing.event.EventsRoute
 import app.e20.core.logic.DatetimeUtils
@@ -9,6 +10,7 @@ import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.post
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -54,18 +56,20 @@ fun Route.eventsRoute() {
         call.respond(events)
     }
 
-    post<EventsRoute>({
-        tags = listOf("event")
-        operationId = "create-event"
-        summary = "create a new event"
-    }) {
-        val eventCreateData = call.receive<EventData.EventCreateOrUpdateRequestData>()
+    authenticate(AuthenticationMethods.USER_SESSION_AUTH) {
+        post<EventsRoute>({
+            tags = listOf("event")
+            operationId = "create-event"
+            summary = "create a new event"
+        }) {
+            val eventCreateData = call.receive<EventData.EventCreateOrUpdateRequestData>()
 
-        val createdEvent = eventDao.create(
-            userId = userIdFromSessionOrThrow(),
-            eventCreateOrUpdateRequestData = eventCreateData
-        )
+            val createdEvent = eventDao.create(
+                userId = userIdFromSessionOrThrow(),
+                eventCreateOrUpdateRequestData = eventCreateData
+            )
 
-        call.respond(createdEvent)
+            call.respond(createdEvent)
+        }
     }
 }
