@@ -1,4 +1,4 @@
-FROM gradle:8.3.0-jdk20 as builder
+FROM gradle:8.5.0-jdk21 as builder
 WORKDIR /etc/e20-api
 COPY . .
 USER root
