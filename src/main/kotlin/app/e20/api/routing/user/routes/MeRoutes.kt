@@ -4,6 +4,7 @@ import app.e20.api.plugins.userIdFromSessionOrThrow
 import app.e20.api.routing.user.MeRoute
 import app.e20.core.exceptions.AuthenticationException
 import app.e20.data.daos.user.UserDao
+import app.e20.data.models.user.UserData
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -21,6 +22,11 @@ fun Route.meRoutes() {
         response {
             HttpStatusCode.OK to {
                 description = "user data"
+                body<UserData>()
+            }
+
+            HttpStatusCode.Unauthorized to {
+                description = "user not logged in"
             }
         }
     }) {

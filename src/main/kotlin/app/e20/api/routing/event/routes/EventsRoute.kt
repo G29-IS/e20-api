@@ -61,6 +61,21 @@ fun Route.eventsRoute() {
             tags = listOf("event")
             operationId = "create-event"
             summary = "create a new event"
+            request {
+                body<EventData.EventCreateOrUpdateRequestData> {
+                    description = "the event data for creation"
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "event created"
+                    body<EventData>()
+                }
+
+                HttpStatusCode.Unauthorized to {
+                    description = "not logged in, only logged in users can create events"
+                }
+            }
         }) {
             val eventCreateData = call.receive<EventData.EventCreateOrUpdateRequestData>()
 

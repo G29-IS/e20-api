@@ -23,6 +23,22 @@ fun Route.eventRoute() {
         tags = listOf("event")
         operationId = "get-event"
         summary = "gets a single event"
+        request {
+            pathParameter<String>("id") {
+                required = true
+                description = "the id of the event"
+            }
+        }
+        response {
+            HttpStatusCode.OK to {
+                description = "event found"
+                body<EventData>()
+            }
+
+            HttpStatusCode.NotFound to {
+                description = "event with the provided id not found"
+            }
+        }
     }) {
         val event = eventDao.get(it.id)
             ?: call.respond(HttpStatusCode.NotFound)
@@ -35,6 +51,29 @@ fun Route.eventRoute() {
             tags = listOf("event")
             operationId = "update-event"
             summary = "updates a single event"
+            request {
+                pathParameter<String>("id") {
+                    required = true
+                    description = "the id of the event"
+                }
+                body<EventData.EventCreateOrUpdateRequestData> {
+                    description = "the new event data"
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "updated event"
+                    body<EventData>()
+                }
+
+                HttpStatusCode.Unauthorized to {
+                    description = "not logged in, only logged in users can update event"
+                }
+
+                HttpStatusCode.NotFound to {
+                    description = "event doesn't exist or logged in user is not the organizer of the event"
+                }
+            }
         }) {
             val updateEventData = call.receive<EventData.EventCreateOrUpdateRequestData>()
 
@@ -51,6 +90,25 @@ fun Route.eventRoute() {
             tags = listOf("event")
             operationId = "delete-event"
             summary = "deletes a single event"
+            request {
+                pathParameter<String>("id") {
+                    required = true
+                    description = "the id of the event"
+                }
+            }
+            response {
+                HttpStatusCode.OK to {
+                    description = "event deleted"
+                }
+
+                HttpStatusCode.Unauthorized to {
+                    description = "not logged in, only logged in users can delete events"
+                }
+
+                HttpStatusCode.NotFound to {
+                    description = "event doesn't exist or logged in user is not the organizer of the event"
+                }
+            }
         }) {
             val deleted = eventDao.delete(
                 id = it.id,

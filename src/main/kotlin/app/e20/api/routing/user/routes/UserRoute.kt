@@ -19,6 +19,21 @@ fun Route.userRoute() {
         tags = listOf("user")
         operationId = "get-user"
         summary = "gets a single user"
+        request {
+            pathParameter<String>("id") {
+                required = true
+                description = "the id of the user"
+            }
+        }
+        response {
+            HttpStatusCode.OK to {
+                description = "user data with events organized by the user"
+                body<UserData.UserWithEventsOrganizedData>()
+            }
+            HttpStatusCode.NotFound to {
+                description = "user not found"
+            }
+        }
     }) {
         val user = userDao.get(it.id)
             ?: return@get call.respond(HttpStatusCode.NotFound)
