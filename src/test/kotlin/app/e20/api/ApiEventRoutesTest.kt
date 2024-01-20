@@ -93,6 +93,35 @@ class ApiEventRoutesTest {
 
     @Test
     @Order(1)
+    fun `list events no auth expect failure`() {
+        runBlocking {
+            val getAllRes = httpClient.get(EventsRoute()) {
+                headers {
+                    bearerAuth(authToken!!)
+                }
+            }
+
+            assert(getAllRes.status.value == 401)
+        }
+    }
+
+    @Test
+    @Order(2)
+    fun `create event no auth expect failure`() {
+        runBlocking {
+            val createEventRes = httpClient.post(EventsRoute()) {
+                setBody(eventCreateData)
+                headers {
+                    bearerAuth(authToken!!)
+                }
+            }
+
+            assert(createEventRes.status.value == 401)
+        }
+    }
+
+    @Test
+    @Order(3)
     fun `perform login expect auth token`() {
         runBlocking {
             val res = httpClient.post(LoginRoute()) {
@@ -113,7 +142,7 @@ class ApiEventRoutesTest {
     }
 
     @Test
-    @Order(2)
+    @Order(4)
     fun `create event expect success`() {
         runBlocking {
             val createEventRes = httpClient.post(EventsRoute()) {
@@ -136,7 +165,7 @@ class ApiEventRoutesTest {
     }
 
     @Test
-    @Order(3)
+    @Order(5)
     fun `list event expect created event in list`() {
         runBlocking {
             val getAllRes = httpClient.get(EventsRoute()) {
@@ -158,7 +187,7 @@ class ApiEventRoutesTest {
     }
 
     @Test
-    @Order(4)
+    @Order(6)
     fun `get created event expect success`() {
         runBlocking {
             val getRes = httpClient.get(
@@ -185,7 +214,7 @@ class ApiEventRoutesTest {
     }
 
     @Test
-    @Order(5)
+    @Order(7)
     fun `update event expect success`() {
         runBlocking {
             val eventUpdateData = eventCreateData.copy(
@@ -217,7 +246,33 @@ class ApiEventRoutesTest {
     }
 
     @Test
-    @Order(6)
+    @Order(8)
+    fun `update event with invalid data expect failure`() {
+        runBlocking {
+            val eventUpdateData = eventCreateData.copy(
+                name = "updated testing-${UUID.randomUUID().toString().take(16)}",
+                description = "",
+                maxParticipants = -1
+            )
+
+            val updateRes = httpClient.put(
+                EventsRoute.EventRoute(
+                    parent = EventsRoute(),
+                    id = createdEvent!!.idEvent
+                )
+            ) {
+                headers {
+                    bearerAuth(authToken!!)
+                }
+                setBody(eventUpdateData)
+            }
+
+            assert(updateRes.status.value == 400)
+        }
+    }
+
+    @Test
+    @Order(9)
     fun `delete event expect success`() {
         runBlocking {
             val deleteEventRes = httpClient.delete(
@@ -232,6 +287,26 @@ class ApiEventRoutesTest {
             }
 
             assert(deleteEventRes.status.value == 200)
+        }
+    }
+
+    @Test
+    @Order(10)
+    fun `create event with invalid data expect failure`() {
+        runBlocking {
+            val createEventRes = httpClient.post(EventsRoute()) {
+                setBody(
+                    eventCreateData.copy(
+                        maxParticipants = -1,
+                        coverImageUrl = ""
+                    )
+                )
+                headers {
+                    bearerAuth(authToken!!)
+                }
+            }
+
+            assert(createEventRes.status.value == 400)
         }
     }
 }
