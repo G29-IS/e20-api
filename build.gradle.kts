@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ktor)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.sentry)
 }
 
 group = "app.e_20"
@@ -22,6 +23,8 @@ dependencies {
     implementation(libs.reflections)
     api(libs.slf4j.api)
 
+    implementation(libs.kotlinx.datetime)
+
     ksp(libs.koin.ksp)
     implementation(libs.bundles.koin)
 
@@ -37,8 +40,11 @@ dependencies {
     implementation(libs.jedis)
     implementation(libs.google.api.client)
 
-    testImplementation(libs.junit)
     testImplementation(kotlin("test"))
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 ksp {
@@ -58,4 +64,15 @@ tasks {
         archiveFileName.set("e20-api.jar")
         mergeServiceFiles()
     }
+}
+
+sentry {
+    // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
+    // This enables source context, allowing you to see your source
+    // code as part of your stack traces in Sentry.
+    includeSourceContext = true
+
+    org = "e20"
+    projectName = "api"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }

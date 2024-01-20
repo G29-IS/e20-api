@@ -69,10 +69,10 @@ fun Application.configureSwagger() {
             version = "1.0.0"
         }
 
-        externalDocs {
-            url = "https://api-docs.e-20.net"
-            description = "Official documentation"
-        }
+//        externalDocs {
+//            url = "https://api-docs.e-20.net"
+//            description = "Official documentation"
+//        }
 
 
         /**

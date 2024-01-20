@@ -59,13 +59,13 @@ fun Route.loginRoute() {
         if (!passwordEncoder.matches(loginData.password, user.passwordHash))
             throw AuthenticationException()
 
-        val sessionId = userSessionDao.create(user.id, call.request.userAgent(), call.request.origin.remoteAddress)
+        val sessionId = userSessionDao.create(user.idUser, call.request.userAgent(), call.request.origin.remoteAddress)
 
         val token = JWT.create()
             .withAudience(ApiConfig.jwtAudience)
             .withIssuer(ApiConfig.jwtIssuer)
             .withClaim(JwtClaims.JWT_SESSION_ID_CLAIM, sessionId.toString())
-            .withClaim(JwtClaims.JWT_USER_ID_CLAIM, user.id.toString())
+            .withClaim(JwtClaims.JWT_USER_ID_CLAIM, user.idUser.toString())
             .withExpiresAt(Date(System.currentTimeMillis() + (ApiConfig.sessionMaxAgeInSeconds * 1000)))
             .sign(Algorithm.HMAC256(ApiConfig.jwtSecret))
 

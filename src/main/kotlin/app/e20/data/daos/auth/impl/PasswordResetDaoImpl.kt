@@ -27,7 +27,7 @@ class PasswordResetDaoImpl(
 
         val passwordResetData = PasswordResetData(
             token = hashedToken,
-            userId = user.id,
+            userId = user.idUser,
             expireAt = DatetimeUtils.currentMillis() + 3600000
         )
 

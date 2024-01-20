@@ -10,7 +10,7 @@ api
 <h4 align="center">REST api per <a href="https://e-20.net" target="_blank">E-20</a>.</h4>
 
 <p align="center">
-  <a href="https://dl.circleci.com/status-badge/redirect/gh/G29-IS/api/tree/main"><img src="https://dl.circleci.com/status-badge/img/gh/G29-IS/api/tree/main.svg?style=svg&circle-token=4729243b7b647b23465f18f1f2a6a7411909b1d4"></a>
+  <a href="https://dl.circleci.com/status-badge/redirect/gh/G29-IS/e20-api/tree/main"><img src="https://dl.circleci.com/status-badge/img/gh/G29-IS/e20-api/tree/main.svg?style=svg&circle-token=4729243b7b647b23465f18f1f2a6a7411909b1d4"></a>
 </p>
 
 ## Esecuzione in locale e development
@@ -34,7 +34,7 @@ Un file `.env` per lo sviluppo si trova in `/env/.env.development`, copialo nell
 
 > Per utilizzare la web dashboard di Postgres
 > inserisci nel campo `Server` il nome dato al Docker container di Postgres,
-> se stai usando il file `docker-compose-dev.yml` esso sarà `index-postgres`.
+> se stai usando il file `docker-compose-dev.yml` esso sarà `e20-dev-env_postgres`.
 > 
 > Il database di default è `e20devdb`  
 
@@ -59,3 +59,8 @@ Ci sono diverse dashboard già esistenti che si possono usare.
 Una dashboard fatta abbastanza bene è [questa qui](https://grafana.com/grafana/dashboards/4701-jvm-micrometer/)  
 
 Per crearla clicca nell'hamburger menu a sinistra della home di Grafana, poi clicca `Dashboards` e successivamente `New > New dashboard` in alto a destra, poi `Import dashboard` ed inserisci il seguente ID a sinistra del pulsante `Load`: `4701`  
+
+### Error logging
+Per il monitoraggio degli errori viene utilizzato [Sentry](https://sentry.io).  
+È necessario avere la variabile di ambiente `SENTRY_AUTH_TOKEN` impostata per permettere un corretto funzionamento del tracking degli errori.  
+Un `Auth token` può essere ottenuto a [questo link](https://e20.sentry.io/projects/api/getting-started/?product=performance-monitoring#:~:text=Organization%20Auth%20Tokens).  

@@ -2,6 +2,7 @@ package app.e20.api.routing.user.routes
 
 import app.e20.api.routing.user.PasswordForgottenRoute
 import app.e20.api.routing.user.ResetPasswordRoute
+import app.e20.api.routing.user.ResetPasswordWebpageRoute
 import app.e20.core.clients.BrevoClient
 import app.e20.core.logic.PasswordEncoder
 import app.e20.data.daos.auth.PasswordResetDao
@@ -12,9 +13,11 @@ import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.post
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.html.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.html.*
 import org.koin.ktor.ext.inject
 
 fun Route.passwordOperationRoutes() {
@@ -54,7 +57,7 @@ fun Route.passwordOperationRoutes() {
         val user = userDao.getFromEmail(request.email)
             ?: return@get call.respond(HttpStatusCode.NotFound)
 
-        if (passwordResetDao.isRateLimited(user.id))
+        if (passwordResetDao.isRateLimited(user.idUser))
             return@get call.respond(HttpStatusCode.TooManyRequests)
 
         val sentEmail = passwordResetDao.createAndSend(user)
@@ -63,6 +66,58 @@ fun Route.passwordOperationRoutes() {
             call.respond(HttpStatusCode.OK)
         else
             call.respond(HttpStatusCode.InternalServerError)
+    }
+
+    get<ResetPasswordWebpageRoute>({
+        tags = listOf("webpage")
+        operationId = "reset-password-webpage"
+        summary = "html page to reset the password"
+        description = "this html page is accessible from a link sent to the user email when he requests to reset its password"
+        protected = false
+        request {
+            queryParameter<String>("token") {
+                description = "the password reset token"
+                required = true
+                allowEmptyValue = false
+                allowReserved = false
+            }
+        }
+        response {
+            HttpStatusCode.OK to {
+                description = "html page"
+            }
+        }
+    }) {
+        call.respondHtml(HttpStatusCode.OK) {
+            head {
+                title {
+                    +"E20 - Reset password"
+                }
+            }
+            body {
+                h1 {
+                    +"Password reset form"
+                }
+
+                p {
+                    +"Insert your new password in the text fields below"
+                }
+
+                form(
+                    action = "/reset-password?token=${it.token}",
+                    encType = FormEncType.applicationXWwwFormUrlEncoded,
+                    method = FormMethod.post,
+                ) {
+                    p {
+                        +"Password:"
+                        passwordInput(name = "password")
+                    }
+                    p {
+                        submitInput() { value = "Confirm password reset" }
+                    }
+                }
+            }
+        }
     }
 
     post<ResetPasswordRoute>({

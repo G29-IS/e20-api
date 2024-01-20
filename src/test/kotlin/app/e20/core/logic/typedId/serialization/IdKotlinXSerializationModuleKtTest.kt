@@ -24,16 +24,6 @@ class IdKotlinXSerializationModuleKtTest {
         }
 
         assertEquals(id.toString(), serialized)
-
-        // TODO
-        /*
-        val intId = newIxIntId<PasswordResetDto>()
-        val serializedInt = json.encodeToString(intId).let {
-            it.substring(1, it.length - 1)
-        }
-
-        assertEquals(intId.toString(), serializedInt)
-         */
     }
 
     @Test
