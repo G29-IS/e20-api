@@ -6,7 +6,7 @@ USER root
 RUN chmod +x ./gradlew
 RUN ./gradlew shadowJar --no-daemon
 
-FROM eclipse-temurin:20
+FROM gradle:8.5.0-jdk21
 WORKDIR /opt/e20-api
 # Copy the shadowjar in the current workdir
 COPY --from=builder ./etc/e20-api/build/libs/ .
