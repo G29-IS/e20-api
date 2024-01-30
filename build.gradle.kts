@@ -8,10 +8,10 @@ plugins {
     alias(libs.plugins.sentry)
 }
 
-group = "app.e_20"
+group = "app.e20"
 version = "0.0.1"
 application {
-    mainClass.set("app.e_20.ApplicationKt")
+    mainClass.set("app.e20.ApplicationKt")
 }
 
 repositories {
