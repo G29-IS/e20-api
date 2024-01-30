@@ -1,35 +1,67 @@
 version: "3.8"
+name: "e20-prod-env"
+
 services:
   e20:
-    image: eu.gcr.io/e-20-408110/e-20-api:latest
+    image: eu.gcr.io/e-20-408110/e-20-api-main:latest
     restart: unless-stopped
-    container_name: "e20-api"
+    container_name: ${COMPOSE_PROJECT_NAME}_api
     env_file:
       - .env
     ports:
       - "8080:${PORT}"
+    networks:
+      - e20-prod-network
+  postgres:
+    image: postgres
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    restart: no
+    environment:
+      POSTGRES_DB: e20proddb
+      POSTGRES_USER: e20ProdUser
+      POSTGRES_PASSWORD: e20ProdPassword
+    volumes:
+      - e20-prod-pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - e20-prod-network
+  redis:
+    image: redis:latest
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    restart: no
+    volumes:
+      - e20-prod-redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - e20-prod-network
   prometheus:
     image: prom/prometheus
-    restart: unless-stopped
+    container_name: ${COMPOSE_PROJECT_NAME}_prometheus
+    restart: no
     ports:
       - "9090:9090"
     volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "../prometheus/prometheus-monitoring.yml:/etc/prometheus/prometheus.yml"
     networks:
-      - monitor-net
+      - e20-prod-network
   grafana:
     image: grafana/grafana
-    restart: unless-stopped
+    container_name: ${COMPOSE_PROJECT_NAME}_grafana
+    restart: no
     ports:
       - "3000:3000"
     volumes:
-      - grafana-storage:/var/lib/grafana
+      - e20-prod-grafana-storage:/var/lib/grafana
     networks:
-      - monitor-net
+      - e20-prod-network
 
 volumes:
-  grafana-storage: {}
+  e20-prod-redis: {}
+  e20-prod-pgdata: {}
+  e20-prod-grafana-storage: {}
 
 networks:
-  monitor-net:
-    name: monitor-net
+  e20-prod-network:
+    name: e20-prod-network
