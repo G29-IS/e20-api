@@ -3,6 +3,7 @@ import app.e20.config.core.ConfigurationManager
 import app.e20.config.core.ConfigurationReader
 import app.e20.data.sources.db.schemas.event.EventPlaceTable
 import app.e20.data.sources.db.schemas.event.EventsTable
+import app.e20.data.sources.db.schemas.user.PasswordResetTable
 import app.e20.data.sources.db.schemas.user.UsersTable
 import core.createScriptOutputsFolderIfNotExisting
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -32,6 +33,7 @@ fun main() {
     val statements = transaction {
         SchemaUtils.createStatements(
             UsersTable,
+            PasswordResetTable,
             EventPlaceTable,
             EventsTable
         )

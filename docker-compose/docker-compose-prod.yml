@@ -14,7 +14,7 @@ services:
       - e20-prod-network
   postgres:
     image: postgres
-    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    container_name: ${COMPOSE_PROJECT_NAME}-postgres
     restart: no
     environment:
       POSTGRES_DB: e20proddb
@@ -28,7 +28,7 @@ services:
       - e20-prod-network
   redis:
     image: redis:latest
-    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    container_name: ${COMPOSE_PROJECT_NAME}-redis
     restart: no
     volumes:
       - e20-prod-redis:/data
@@ -38,7 +38,7 @@ services:
       - e20-prod-network
   prometheus:
     image: prom/prometheus
-    container_name: ${COMPOSE_PROJECT_NAME}_prometheus
+    container_name: ${COMPOSE_PROJECT_NAME}-prometheus
     restart: no
     ports:
       - "9090:9090"
@@ -48,7 +48,7 @@ services:
       - e20-prod-network
   grafana:
     image: grafana/grafana
-    container_name: ${COMPOSE_PROJECT_NAME}_grafana
+    container_name: ${COMPOSE_PROJECT_NAME}-grafana
     restart: no
     ports:
       - "3000:3000"

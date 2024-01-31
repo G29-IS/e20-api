@@ -6,7 +6,6 @@ import app.e20.core.logic.typedId.newIxId
 import app.e20.data.models.auth.LoginCredentials
 import app.e20.data.models.event.EventData
 import app.e20.data.models.event.EventPlaceData
-import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*

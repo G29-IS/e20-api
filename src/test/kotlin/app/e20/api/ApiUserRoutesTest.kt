@@ -9,12 +9,10 @@ import app.e20.data.models.auth.LoginCredentials
 import app.e20.data.models.user.UserData
 import io.ktor.client.call.*
 import io.ktor.client.plugins.resources.*
-import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.junit.jupiter.api.*
-import java.util.UUID
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

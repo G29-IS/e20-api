@@ -7,7 +7,6 @@ import app.e20.data.sources.db.schemas.event.EventPlaceTable.address
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.id
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.name
 import app.e20.data.sources.db.schemas.event.EventPlaceTable.url
-import app.e20.data.sources.db.schemas.user.UsersTable.nullable
 import app.e20.data.sources.db.toEntityId
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass

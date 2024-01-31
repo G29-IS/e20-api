@@ -4,7 +4,7 @@ name: "e20-dev-env"
 services:
   postgres:
     image: postgres
-    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    container_name: ${COMPOSE_PROJECT_NAME}-postgres
     restart: no
     environment:
       POSTGRES_DB: e20devdb
@@ -18,7 +18,7 @@ services:
       - e20-dev-postgres-network
   adminer:
     image: adminer
-    container_name: ${COMPOSE_PROJECT_NAME}_adminer
+    container_name: ${COMPOSE_PROJECT_NAME}-adminer
     restart: no
     ports:
       - "8081:8080"
@@ -26,7 +26,7 @@ services:
       - e20-dev-postgres-network
   redis:
     image: redis:latest
-    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    container_name: ${COMPOSE_PROJECT_NAME}-redis
     restart: no
     volumes:
       - e20-dev-redis:/data
@@ -36,7 +36,7 @@ services:
       - e20-dev-redis-network
   redis-insight:
     image: redislabs/redisinsight
-    container_name: ${COMPOSE_PROJECT_NAME}_redis-insight
+    container_name: ${COMPOSE_PROJECT_NAME}-redis-insight
     restart: no
     ports:
       - "8082:8001"
@@ -44,7 +44,7 @@ services:
       - e20-dev-redis-network
   prometheus:
     image: prom/prometheus
-    container_name: ${COMPOSE_PROJECT_NAME}_prometheus
+    container_name: ${COMPOSE_PROJECT_NAME}-prometheus
     restart: no
     ports:
       - "9090:9090"
@@ -54,7 +54,7 @@ services:
       - e20-dev-monitor-net
   grafana:
     image: grafana/grafana
-    container_name: ${COMPOSE_PROJECT_NAME}_grafana
+    container_name: ${COMPOSE_PROJECT_NAME}-grafana
     restart: no
     ports:
       - "3000:3000"
