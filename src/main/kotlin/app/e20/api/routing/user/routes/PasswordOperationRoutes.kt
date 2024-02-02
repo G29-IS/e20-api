@@ -142,6 +142,9 @@ fun Route.passwordOperationRoutes() {
             HttpStatusCode.OK to {
                 description = "password reset"
             }
+            HttpStatusCode.BadRequest to {
+                description = "invalid password length"
+            }
             HttpStatusCode.NotFound to {
                 description = "something went wrong"
             }

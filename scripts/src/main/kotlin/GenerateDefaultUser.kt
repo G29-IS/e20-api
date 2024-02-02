@@ -16,7 +16,7 @@ fun main() {
     val defaultUser = UserData(
         idUser = newIxId(),
         email = "default@gmail.com",
-        passwordHash = PasswordEncoder().encode("default"),
+        passwordHash = PasswordEncoder().encode("g29-password"),
         name = "Marian",
         surname = "Ologu",
         username = "ologumarian",
