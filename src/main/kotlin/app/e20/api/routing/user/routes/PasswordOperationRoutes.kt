@@ -11,6 +11,7 @@ import app.e20.data.daos.user.UserDao
 import app.e20.data.models.auth.PasswordResetRequestBody
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.post
+import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.html.*
@@ -105,7 +106,7 @@ fun Route.passwordOperationRoutes() {
 
                 form(
                     action = "/reset-password?token=${it.token}",
-                    encType = FormEncType.textPlain,
+                    encType = FormEncType.applicationXWwwFormUrlEncoded,
                     method = FormMethod.post,
                 ) {
                     p {
@@ -134,7 +135,7 @@ fun Route.passwordOperationRoutes() {
                 allowReserved = false
             }
             body<PasswordResetRequestBody> {
-                description = "contains the new password"
+                description = "should contain the new password in x-www-form-urlencoded format"
                 required = true
             }
         }
@@ -143,7 +144,7 @@ fun Route.passwordOperationRoutes() {
                 description = "password reset"
             }
             HttpStatusCode.BadRequest to {
-                description = "invalid password length"
+                description = "missing password or invalid password length"
             }
             HttpStatusCode.NotFound to {
                 description = "something went wrong"
@@ -156,7 +157,9 @@ fun Route.passwordOperationRoutes() {
         val user = userDao.get(passwordResetDto.userId)
             ?: return@post call.respond(HttpStatusCode.NotFound)
 
-        val newPassword = call.receive<PasswordResetRequestBody>().password
+        val newPassword = call.receiveParameters()["password"]
+            ?: return@post call.respond(HttpStatusCode.BadRequest)
+
         val newPasswordHashed = passwordEncoder.encode(newPassword)
 
         // If the user email wasn't verified before, now it can be considered verified
