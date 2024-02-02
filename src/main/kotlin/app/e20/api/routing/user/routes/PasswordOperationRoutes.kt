@@ -105,7 +105,7 @@ fun Route.passwordOperationRoutes() {
 
                 form(
                     action = "/reset-password?token=${it.token}",
-                    encType = FormEncType.applicationXWwwFormUrlEncoded,
+                    encType = FormEncType.textPlain,
                     method = FormMethod.post,
                 ) {
                     p {
@@ -113,7 +113,7 @@ fun Route.passwordOperationRoutes() {
                         passwordInput(name = "password")
                     }
                     p {
-                        submitInput() { value = "Confirm password reset" }
+                        submitInput { value = "Confirm password reset" }
                     }
                 }
             }
