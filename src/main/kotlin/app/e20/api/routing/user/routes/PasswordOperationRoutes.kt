@@ -171,6 +171,6 @@ fun Route.passwordOperationRoutes() {
         // Send notification email
         brevoClient.sendPasswordResetSuccessEmail(user.email)
 
-        call.respond(HttpStatusCode.OK)
+        call.respond(HttpStatusCode.OK, "Your password has been reset")
     }
 }
