@@ -48,7 +48,6 @@ class BrevoClient: IClosableComponent {
 
     /**
      * Sends a password reset message to a given [email]
-     * TODO: Define template ids in Brevo
      *
      * @param email The target receiver email
      * @param token The token for the password reset
@@ -90,7 +89,7 @@ class BrevoClient: IClosableComponent {
                         email = email
                     )
                 ),
-                templateId = 3
+                templateId = 2
             ))
         }
 
