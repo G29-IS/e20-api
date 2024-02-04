@@ -48,11 +48,11 @@ import java.util.*
  */
 object EventsTable : UUIDTable() {
     val name = varchar("event_name", 150)
-    val coverImageUrl = varchar("cover_image_url", 200) // TODO
+    val coverImageUrl = varchar("cover_image_url", 200)
     val idOrganizer = EventsTable.reference(
         name = "id_organizer",
         foreign = UsersTable,
-        onDelete = ReferenceOption.CASCADE // TODO
+        onDelete = ReferenceOption.CASCADE
     ).index()
     val description = varchar("description", 500)
     val openingDateTime = datetime("opening_date_time")

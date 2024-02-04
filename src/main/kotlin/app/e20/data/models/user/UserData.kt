@@ -31,7 +31,7 @@ data class UserData(
     val phone: String,
     val birthDate: LocalDate,
     val gender: UserGender,
-    val cityOfInterest: String, // TODO
+    val cityOfInterest: String,
     val private: Boolean,
     val profileImageUrl: String
 ) {

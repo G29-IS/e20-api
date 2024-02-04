@@ -48,9 +48,9 @@ object UsersTable : UUIDTable() {
     val phone = varchar("phone", 20)
     val birthDate = date("birth_date")
     val gender = enumerationByName<UserData.UserGender>("gender", 20)
-    val cityOfInterest = varchar("city_of_interest", 150) // TODO
+    val cityOfInterest = varchar("city_of_interest", 150)
     val private = bool("is_private")
-    val profileImageUrl = varchar("profile_image_url", 200) // TODO: Check length
+    val profileImageUrl = varchar("profile_image_url", 200)
 }
 
 /**
