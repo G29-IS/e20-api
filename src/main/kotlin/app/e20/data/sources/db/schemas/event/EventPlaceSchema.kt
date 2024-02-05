@@ -28,7 +28,7 @@ object EventPlaceTable: IntIdTable() {
     ).index()
     val name = varchar("place_name", 150).nullable()
     val address = varchar("address", 200)
-    val url = varchar("url", 200).nullable()
+    val url = varchar("url", 500).nullable()
 }
 
 /**

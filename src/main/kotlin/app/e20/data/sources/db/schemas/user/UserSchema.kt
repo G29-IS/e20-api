@@ -50,7 +50,7 @@ object UsersTable : UUIDTable() {
     val gender = enumerationByName<UserData.UserGender>("gender", 20)
     val cityOfInterest = varchar("city_of_interest", 150)
     val private = bool("is_private")
-    val profileImageUrl = varchar("profile_image_url", 200)
+    val profileImageUrl = varchar("profile_image_url", 500)
 }
 
 /**
