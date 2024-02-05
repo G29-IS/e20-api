@@ -21,13 +21,7 @@ jobs:
 workflows:
   test-build-publish:
     jobs:
-#      - gradle/test:
-#          name: test
-#          executor:
-#            name: gradle/default
-#            tag: '20.0.1'
       - build-and-push-image:
-#          requires: [test]
           filters:
             branches:
               only:

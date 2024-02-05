@@ -48,11 +48,11 @@ import java.util.*
  */
 object EventsTable : UUIDTable() {
     val name = varchar("event_name", 150)
-    val coverImageUrl = varchar("cover_image_url", 200) // TODO
+    val coverImageUrl = varchar("cover_image_url", 500)
     val idOrganizer = EventsTable.reference(
         name = "id_organizer",
         foreign = UsersTable,
-        onDelete = ReferenceOption.CASCADE // TODO
+        onDelete = ReferenceOption.CASCADE
     ).index()
     val description = varchar("description", 500)
     val openingDateTime = datetime("opening_date_time")
@@ -61,7 +61,7 @@ object EventsTable : UUIDTable() {
     val maxParticipants = integer("max_participants").nullable()
     val visibility = enumerationByName<EventData.EventVisibility>("event_visibility", 20)
     val availability = enumerationByName<EventData.EventAvailability>("availability", 20)
-    val paymentLink = varchar("event_link", 200).nullable()
+    val paymentLink = varchar("payment_link", 500).nullable()
     val isModified = bool("is_modified")
     val timesShared = long("times_shared")
 }

@@ -1,0 +1,90 @@
+Table "eventplace" {
+  "id" integer [not null]
+  "id_event" uuid [not null]
+  "place_name" "character varying(150)"
+  "address" "character varying(200)" [not null]
+  "url" "character varying(500)"
+
+Indexes {
+  id_event [type: btree, name: "eventplace_id_event"]
+}
+}
+
+Table "events" {
+  "id" uuid [not null]
+  "event_name" "character varying(150)" [not null]
+  "cover_image_url" "character varying(500)" [not null]
+  "id_organizer" uuid [not null]
+  "description" "character varying(1000)" [not null]
+  "opening_date_time" timestamp [not null]
+  "door_opening_date_time" timestamp [not null]
+  "event_type" "character varying(20)" [not null]
+  "max_participants" integer
+  "event_visibility" "character varying(20)" [not null]
+  "availability" "character varying(20)" [not null]
+  "payment_link" "character varying(500)"
+  "is_modified" boolean [not null]
+  "times_shared" bigint [not null]
+
+Indexes {
+  id_organizer [type: btree, name: "events_id_organizer"]
+}
+}
+
+Table "flyway_schema_history" {
+  "installed_rank" integer [not null]
+  "version" "character varying(50)"
+  "description" "character varying(200)" [not null]
+  "type" "character varying(20)" [not null]
+  "script" "character varying(1000)" [not null]
+  "checksum" integer
+  "installed_by" "character varying(100)" [not null]
+  "installed_on" timestamp [not null, default: `now()`]
+  "execution_time" integer [not null]
+  "success" boolean [not null]
+
+Indexes {
+  success [type: btree, name: "flyway_schema_history_s_idx"]
+}
+}
+
+Table "passwordreset" {
+  "id" integer [not null]
+  "token" "character varying(100)" [not null]
+  "id_user" uuid [not null]
+  "created_at" bigint [not null]
+  "expires_at" bigint [not null]
+
+Indexes {
+  id_user [type: btree, name: "passwordreset_id_user"]
+}
+}
+
+Table "users" {
+  "id" uuid [not null]
+  "email" "character varying(150)" [not null]
+  "password_hash" "character varying(100)"
+  "full_name" "character varying(150)" [not null]
+  "surname" "character varying(150)" [not null]
+  "username" "character varying(100)" [not null]
+  "phone" "character varying(20)" [not null]
+  "birth_date" date [not null]
+  "gender" "character varying(20)" [not null]
+  "city_of_interest" "character varying(150)" [not null]
+  "is_private" boolean [not null]
+  "profile_image_url" "character varying(500)" [not null]
+}
+
+Table "user_auth_session" {
+  id uuid
+  user_id uuid
+  iat bigint
+  device_name varchar [null]
+  ip varchar
+}
+
+Ref "fk_eventplace_id_event__id":"events"."id" < "eventplace"."id_event" [update: restrict, delete: cascade]
+
+Ref "fk_events_id_organizer__id":"users"."id" < "events"."id_organizer" [update: restrict, delete: cascade]
+
+Ref "fk_passwordreset_id_user__id":"users"."id" < "passwordreset"."id_user" [update: restrict, delete: cascade]

@@ -2,7 +2,7 @@ package app.e20.data.validation
 
 object Validations {
     const val minImageUrlLength = 1
-    const val maxImageUrlLength = 200
+    const val maxImageUrlLength = 500
 
     object Event {
         const val minNameLength = 1
@@ -15,7 +15,7 @@ object Validations {
         const val maxPlaceNameLength = 100
 
         const val minPlaceUrlLength = 1
-        const val maxPlaceUrlLength = 200
+        const val maxPlaceUrlLength = 500
 
         const val minPlaceAddressLength = 1
         const val maxPlaceAddressLength = 200
@@ -23,6 +23,6 @@ object Validations {
         const val minParticipants = 1
 
         const val minPaymentLinkLength = 1
-        const val maxPaymentLinkLength = 200
+        const val maxPaymentLinkLength = 500
     }
 }
