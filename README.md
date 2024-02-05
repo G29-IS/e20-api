@@ -34,7 +34,7 @@ Un file `.env` per lo sviluppo si trova in `/env/.env.development`, copialo nell
 
 > Per utilizzare la web dashboard di Postgres
 > inserisci nel campo `Server` il nome dato al Docker container di Postgres,
-> se stai usando il file `docker-compose-dev.yml` esso sarà `e20-dev-env_postgres`.
+> se stai usando il file `docker-compose-dev.yml` esso sarà `e20-dev-env-postgres`.
 > 
 > Il database di default è `e20devdb`  
 
