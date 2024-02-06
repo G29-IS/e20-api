@@ -41,7 +41,7 @@ fun Route.userRoute() {
         val eventsOrganized = eventDao.getOfOrganizer(it.id)
 
         call.respond(UserData.UserWithEventsOrganizedData(
-            user = user,
+            user = user.toUserPublicData(),
             eventsOrganized = eventsOrganized
         ))
     }
