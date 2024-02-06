@@ -5,6 +5,7 @@ import app.e20.data.models.event.EventData
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.io.Serial
 
 /**
  * @param idUser
@@ -36,13 +37,30 @@ data class UserData(
     val profileImageUrl: String
 ) {
 
+    fun toUserPublicData() = UserPublicData(
+        idUser = idUser,
+        username = username,
+        birthDate = birthDate,
+        gender = gender,
+        profileImageUrl = profileImageUrl
+    )
+
     enum class UserGender {
         MALE, FEMALE, OTHER, NOT_SPECIFIED
     }
 
     @Serializable
     data class UserWithEventsOrganizedData(
-        val user: UserData,
+        val user: UserPublicData,
         val eventsOrganized: List<EventData>
+    )
+
+    @Serializable
+    data class UserPublicData(
+        @Contextual val idUser: IxId<UserData>,
+        val username: String,
+        val birthDate: LocalDate,
+        val gender: UserGender,
+        val profileImageUrl: String
     )
 }
