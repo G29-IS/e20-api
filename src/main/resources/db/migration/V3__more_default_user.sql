@@ -1,4 +1,4 @@
 INSERT INTO users(id, email, password_hash, full_name, surname, username, phone, birth_date, gender, city_of_interest, is_private, profile_image_url)
-VALUES ('3aaad4d0-03db-45f6-a76e-7dc851d520ad', 'giuliopime@gmail.com', '$2a$10$wJd01CLM3tGpvi2Ed.f3eOj4OpQeU1SWS2aX6CprgtmNGxz0Q/S7m', 'Giulio', 'Pimenoff Verdolin', 'giuliopime', '+393454568769', '2001-03-03', 'MALE', 'tbd', false, ''),
+VALUES ('3aaad4d0-03db-45f6-a76e-7dc851d520ad', 'giuliopime@gmail.com', '$2a$10$wJd01CLM3tGpvi2Ed.f3eOj4OpQeU1SWS2aX6CprgtmNGxz0Q/S7m', 'Giulio', 'Pimenoff Verdolin', 'giuliopime', '+393454568769', '2001-03-03', 'MALE', 'tbd', false, 'https://giuliopime.dev/icon.png'),
 ('6cf98bfc-f499-4d23-9900-0fe87130c1e4', 'alessandro.tomasi@unitn.it', '$2a$10$wJd01CLM3tGpvi2Ed.f3eOj4OpQeU1SWS2aX6CprgtmNGxz0Q/S7m', 'Alessandro', 'Tomasi', 'alessandrotomasi', '+393454568769', '2001-03-03', 'MALE', 'tbd', false, ''),
 ('7b56d16c-ad0e-49f0-85ee-e6a5cc98f3c9', 'antonio.bucchiarone@unitn.it', '$2a$10$wJd01CLM3tGpvi2Ed.f3eOj4OpQeU1SWS2aX6CprgtmNGxz0Q/S7m', 'Antonio', 'Bucchiarone', 'antoniobucchiarone', '+393454568769', '2001-03-03', 'MALE', 'tbd', false, '');

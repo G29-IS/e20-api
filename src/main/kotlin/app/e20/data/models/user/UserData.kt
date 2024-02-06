@@ -39,6 +39,8 @@ data class UserData(
 
     fun toUserPublicData() = UserPublicData(
         idUser = idUser,
+        name = name,
+        surname = surname,
         username = username,
         birthDate = birthDate,
         gender = gender,
@@ -58,6 +60,8 @@ data class UserData(
     @Serializable
     data class UserPublicData(
         @Contextual val idUser: IxId<UserData>,
+        val name: String,
+        val surname: String,
         val username: String,
         val birthDate: LocalDate,
         val gender: UserGender,
