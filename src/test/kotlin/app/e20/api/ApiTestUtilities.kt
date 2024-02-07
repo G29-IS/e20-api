@@ -16,8 +16,9 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 object ApiTestUtilities {
+    const val DEFAULT_USER_ID = "bc9e631a-5e19-4885-ac01-1a3c48ffe9d3"
     const val DEFAULT_USER_EMAIL = "default@gmail.com"
-    const val DEFAULT_USER_PASSWORD = "default"
+    const val DEFAULT_USER_PASSWORD = "g29-password"
     val httpClient: HttpClient
 
     init {
