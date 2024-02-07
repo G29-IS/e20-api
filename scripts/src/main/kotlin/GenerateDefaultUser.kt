@@ -4,8 +4,11 @@ import app.e20.core.logic.typedId.impl.IxIdGenerator
 import app.e20.core.logic.typedId.newIxId
 import app.e20.data.models.user.UserData
 import app.e20.data.sources.db.schemas.user.UserEntity
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.datetime.toJavaLocalDate
+import org.slf4j.LoggerFactory
 
 private val log = KotlinLogging.logger {  }
 
@@ -13,6 +16,8 @@ private val log = KotlinLogging.logger {  }
  * Generates a default user for the application
  */
 fun main() {
+    (LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger).level = Level.INFO
+
     val defaultUser = UserData(
         idUser = newIxId(),
         email = "default@gmail.com",

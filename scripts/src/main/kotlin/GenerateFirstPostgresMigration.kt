@@ -5,11 +5,14 @@ import app.e20.data.sources.db.schemas.event.EventPlaceTable
 import app.e20.data.sources.db.schemas.event.EventsTable
 import app.e20.data.sources.db.schemas.user.PasswordResetTable
 import app.e20.data.sources.db.schemas.user.UsersTable
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
 import core.createScriptOutputsFolderIfNotExisting
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import java.io.File
 
 private const val DB_DRIVER = "org.postgresql.Driver"
@@ -21,6 +24,7 @@ private val log = KotlinLogging.logger {  }
  * Result file should be put in /resources/db/migration/V1__create_db.sql
  */
 fun main() {
+    (LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger).level = Level.INFO
     ConfigurationManager("app.e20.config", ConfigurationReader::read).initialize()
 
     Database.connect(

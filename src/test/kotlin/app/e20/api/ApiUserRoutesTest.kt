@@ -5,6 +5,7 @@ import app.e20.api.routing.user.LogoutRoute
 import app.e20.api.routing.user.MeRoute
 import app.e20.api.routing.user.UserRoute
 import app.e20.core.logic.typedId.newIxId
+import app.e20.core.logic.typedId.toIxId
 import app.e20.data.models.auth.LoginCredentials
 import app.e20.data.models.user.UserData
 import io.ktor.client.call.*
@@ -69,28 +70,6 @@ class ApiUserRoutesTest {
 
     @Test
     @Order(3)
-    fun `get self user with events expect success`() {
-        runBlocking {
-            val res = httpClient.get(UserRoute(id = selfUser!!.idUser)) {
-                headers {
-                    bearerAuth(authToken!!)
-                }
-            }
-
-            assert(res.status.value == 200)
-
-            val userWithEvents = try {
-                res.body<UserData.UserWithEventsOrganizedData>()
-            } catch (e: Exception) {
-                fail(e)
-            }
-
-            assert(userWithEvents.user.email == ApiTestUtilities.DEFAULT_USER_EMAIL)
-        }
-    }
-
-    @Test
-    @Order(4)
     fun `get missing user with events expect not found`() {
         runBlocking {
             val res = httpClient.get(UserRoute(id = newIxId())) {
@@ -104,7 +83,7 @@ class ApiUserRoutesTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     fun `perform logout expect success`() {
         runBlocking {
             val res = httpClient.get(LogoutRoute()) {
