@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class EventPlaceData(
-    val name: String?,
+    val name: String? = null,
     val address: String,
-    val url: String?
+    val url: String? = null
 )
