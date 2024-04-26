@@ -49,15 +49,15 @@ data class EventData(
     val timesShared: Long
 ) {
     enum class EventType {
-        CONCERT, FESTIVAL, BAR, CLUB, PARTY, HOUSEPARTY, PRIVATEPARTY, WORKSHOP, CONGRESS
+        concert, festival, bar, club, party, houseparty, private_party, workshop, congress
     }
 
     enum class EventAvailability {
-        AVAILABLE, RUNNING_OUT, SOLD_OUT, CANCELED
+        available, running_out, sold_out, canceled
     }
 
     enum class EventVisibility {
-        PUBLIC
+        public
     }
 
     @Serializable
