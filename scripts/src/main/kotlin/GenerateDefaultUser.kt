@@ -1,9 +1,13 @@
 import app.e20.core.logic.PasswordEncoder
+import app.e20.core.logic.typedId.impl.IxId
+import app.e20.core.logic.typedId.impl.IxIdGenerator
 import app.e20.core.logic.typedId.newIxId
 import app.e20.data.models.user.UserData
+import app.e20.data.sources.db.schemas.user.UserEntity
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.datetime.toJavaLocalDate
 import org.slf4j.LoggerFactory
 
 private val log = KotlinLogging.logger {  }
@@ -23,7 +27,7 @@ fun main() {
         username = "ologumarian",
         phone = "+393454568769",
         birthDate = kotlinx.datetime.LocalDate(2001, 5, 3),
-        gender = UserData.UserGender.male,
+        gender = UserData.UserGender.MALE,
         cityOfInterest = "tbd",
         private = false,
         profileImageUrl = ""

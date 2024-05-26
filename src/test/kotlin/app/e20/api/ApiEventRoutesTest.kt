@@ -30,10 +30,10 @@ class ApiEventRoutesTest {
         place = EventPlaceData("test location", "test address", null),
         openingDateTime = Clock.System.now().plus(24, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.UTC),
         doorOpeningDateTime = Clock.System.now().plus(25, DateTimeUnit.HOUR).toLocalDateTime(TimeZone.UTC),
-        type = EventData.EventType.private_party,
+        type = EventData.EventType.PRIVATEPARTY,
         maxParticipants = 45,
-        visibility = EventData.EventVisibility.public,
-        availability = EventData.EventAvailability.available,
+        visibility = EventData.EventVisibility.PUBLIC,
+        availability = EventData.EventAvailability.AVAILABLE,
         paymentLink = null
     )
     private var createdEvent: EventData? = null
