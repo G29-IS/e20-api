@@ -45,10 +45,10 @@ fun Route.eventsRoute() {
         }
     }) {
         val startDate = it.dateStart ?: DatetimeUtils.currentInstant()
-            .minus(1, DateTimeUnit.MONTH, TimeZone.UTC)
+            .minus(1, DateTimeUnit.YEAR, TimeZone.UTC)
             .toLocalDateTime(TimeZone.UTC)
         val endDate = it.dateEnd ?: DatetimeUtils.currentInstant()
-            .plus(1, DateTimeUnit.MONTH, TimeZone.UTC)
+            .plus(1, DateTimeUnit.YEAR, TimeZone.UTC)
             .toLocalDateTime(TimeZone.UTC)
 
         val events = eventDao.getForDates(startDate, endDate)
