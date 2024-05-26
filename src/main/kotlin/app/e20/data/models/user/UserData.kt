@@ -5,6 +5,7 @@ import app.e20.data.models.event.EventData
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.io.Serial
 
 /**
  * @param idUser
@@ -47,7 +48,7 @@ data class UserData(
     )
 
     enum class UserGender {
-        male, female, other, not_specified
+        MALE, FEMALE, OTHER, NOT_SPECIFIED
     }
 
     @Serializable
