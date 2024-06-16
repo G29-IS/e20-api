@@ -5,6 +5,7 @@ import app.e20.api.plugins.userIdFromSessionOrThrow
 import app.e20.api.routing.event.EventsRoute
 import app.e20.core.logic.DatetimeUtils
 import app.e20.data.daos.event.EventDao
+import app.e20.data.daos.user.UserDao
 import app.e20.data.models.event.EventData
 import io.github.smiley4.ktorswaggerui.dsl.resources.get
 import io.github.smiley4.ktorswaggerui.dsl.resources.post
@@ -19,6 +20,7 @@ import org.koin.ktor.ext.inject
 
 fun Route.eventsRoute() {
     val eventDao by inject<EventDao>()
+    val userDao by inject<UserDao>()
 
     get<EventsRoute>({
         tags = listOf("event")
@@ -52,8 +54,12 @@ fun Route.eventsRoute() {
             .toLocalDateTime(TimeZone.UTC)
 
         val events = eventDao.getForDates(startDate, endDate)
+        val users = events.mapNotNull { event -> userDao.get(event.idOrganizer)?.toUserPublicData() }
 
-        call.respond(events)
+        call.respond(EventData.EventsFeedResponse(
+            events = events,
+            users = users
+        ))
     }
 
     authenticate(AuthenticationMethods.USER_SESSION_AUTH) {
