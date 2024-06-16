@@ -114,6 +114,6 @@ data class EventData(
     @Serializable
     data class EventsFeedResponse(
         val events: List<EventData>,
-        val users: List<UserData.UserPublicData>
+        val users: List<UserData>
     )
 }

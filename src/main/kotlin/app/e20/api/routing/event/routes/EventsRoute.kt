@@ -54,7 +54,7 @@ fun Route.eventsRoute() {
             .toLocalDateTime(TimeZone.UTC)
 
         val events = eventDao.getForDates(startDate, endDate)
-        val users = events.mapNotNull { event -> userDao.get(event.idOrganizer)?.toUserPublicData() }
+        val users = events.mapNotNull { event -> userDao.get(event.idOrganizer) }
 
         call.respond(EventData.EventsFeedResponse(
             events = events,
