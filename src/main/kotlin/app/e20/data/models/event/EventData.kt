@@ -110,4 +110,10 @@ data class EventData(
             }
         }.invoke(this)
     }
+
+    @Serializable
+    data class EventsFeedResponse(
+        val events: List<EventData>,
+        val users: List<UserData.UserPublicData>
+    )
 }
