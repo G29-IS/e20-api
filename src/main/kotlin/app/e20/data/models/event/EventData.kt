@@ -69,10 +69,10 @@ data class EventData(
         val openingDateTime: LocalDateTime,
         val doorOpeningDateTime: LocalDateTime,
         val type: EventType,
-        val maxParticipants: Int?,
+        val maxParticipants: Int? = null,
         val visibility: EventVisibility,
         val availability: EventAvailability,
-        val paymentLink: String?
+        val paymentLink: String? = null
     ) : Validatable<EventCreateOrUpdateRequestData> {
         override fun validate() = Validation {
             EventCreateOrUpdateRequestData::name {
